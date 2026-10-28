@@ -20,7 +20,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className="h-full antialiased">
+    // suppressHydrationWarning: o script de movimento das páginas de site adiciona uma classe
+    // em <html> antes da hidratação (ver features/animations/site-motion-script.ts).
+    <html lang="pt-BR" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full">{children}</body>
     </html>
   );

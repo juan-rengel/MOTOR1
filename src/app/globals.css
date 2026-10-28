@@ -103,3 +103,8 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--color-ink-600) transparent;
 }
+
+/* Antes da hidratação (ver site-motion-script.ts): elementos animáveis começam ocultos. */
+.cws-js [data-reveal] {
+  opacity: 0;
+}
