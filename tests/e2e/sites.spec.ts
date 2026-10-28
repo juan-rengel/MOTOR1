@@ -3,11 +3,13 @@ import { expect, test } from "@playwright/test";
 import { expectNoHorizontalOverflow, trackErrors } from "./helpers";
 
 /** Modelos disponíveis (manter em sincronia com src/features/templates/registry.ts). */
-const TEMPLATE_IDS = ["mechanic-cinematic"];
+const TEMPLATE_IDS = ["mechanic-cinematic", "optics-atelier", "fashion-editorial"];
 
 test.describe("sites gerados (demonstrações)", () => {
   for (const id of TEMPLATE_IDS) {
     test(`${id}: carrega sem erros e mostra seções`, async ({ page }) => {
+      // Sem GPU, a cena 3D roda em software e deixa a rolagem lenta neste ambiente de teste.
+      test.setTimeout(120_000);
       const errors = trackErrors(page);
       const missing: string[] = [];
       page.on("response", (r) => {
@@ -89,5 +91,29 @@ test.describe("sites gerados (demonstrações)", () => {
     await form.getByLabel("Mensagem").fill("Gostaria de um orçamento.");
     await form.getByRole("button", { name: /Enviar/ }).click();
     await expect(page.getByText(/Nada foi enviado/)).toBeVisible();
+  });
+});
+
+test.describe("cena de modelo próprio (GLB)", () => {
+  test("carrega o modelo demonstrativo da biblioteca", async ({ page, request }) => {
+    test.setTimeout(150_000);
+    const created = await request.post("/api/projects", {
+      data: {
+        templateId: "mechanic-cinematic",
+        style: "minimal",
+        business: { name: "Loja de Móveis Teste", segment: "furniture", city: "", description: "", offerings: [], audience: "", phone: "", whatsapp: "", email: "", address: "", hours: "", social: { instagram: "", facebook: "", tiktok: "", youtube: "", linkedin: "", website: "" }, goal: "catalog" },
+      },
+    });
+    const { project } = await created.json();
+    project.scene = { ...project.scene, sceneId: "custom-model", modelSrc: "/assets/demo/models/chair.glb", quality: "low" };
+    const saved = await request.put(`/api/projects/${project.id}`, { data: { project, expectedRevision: 0 } });
+    expect(saved.status()).toBe(200);
+
+    const errors = trackErrors(page);
+    await page.goto(`/preview/${project.id}`);
+    const host = page.locator('[data-scene="custom-model"]');
+    await expect(host).toHaveAttribute("data-scene-ready", "true", { timeout: 120_000 });
+    expect(errors).toEqual([]);
+    await request.delete(`/api/projects/${project.id}`);
   });
 });

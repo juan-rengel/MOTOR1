@@ -188,7 +188,7 @@ export const VISUAL_STYLES: Record<VisualStyleId, VisualStyleDefinition> = {
         surface: "#ffffff",
         text: "#1a1023",
         muted: "#64566f",
-        primary: "#e11d48",
+        primary: "#d4183f",
         onPrimary: "#ffffff",
         accent: "#7c3aed",
         border: "#f0e1d6",

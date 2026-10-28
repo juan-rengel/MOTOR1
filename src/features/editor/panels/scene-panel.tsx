@@ -65,6 +65,19 @@ export function ScenePanel({ project, dispatch, onAddStory }: { project: Project
             />
           </div>
         )}
+        {def.variants && (
+          <Field label="Variação">
+            {(a) => (
+              <Select id={a.id} value={s.variant || def.variants![0]!.id} onChange={(e) => set({ variant: e.target.value }, null)}>
+                {def.variants!.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.label}
+                  </option>
+                ))}
+              </Select>
+            )}
+          </Field>
+        )}
         <Field label="Movimento de câmera">
           {(a) => (
             <Select id={a.id} value={s.cameraMotion} onChange={(e) => set({ cameraMotion: e.target.value as SceneSettings["cameraMotion"] }, null)}>

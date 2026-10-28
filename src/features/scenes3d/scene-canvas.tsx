@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, type ReactNode, type RefObject } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Suspense, useEffect, useRef, type ReactNode, type RefObject } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { AdaptiveDpr, PerformanceMonitor } from "@react-three/drei";
 import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import type { SceneSettings } from "@/domain/scene";
@@ -19,6 +19,18 @@ export function resolveQuality(quality: SceneSettings["quality"], tier: DeviceTi
   if (level === "high") return { dpr: [1, 2], shadows: true, reflections: true, particles: 70 };
   if (level === "medium") return { dpr: [1, 1.5], shadows: false, reflections: false, particles: 40 };
   return { dpr: [1, 1], shadows: false, reflections: false, particles: 0 };
+}
+
+/** No modo sob demanda, desenha alguns quadros extras para reflexos/sombras se estabilizarem. */
+function WarmupFrames({ count }: { count: number }) {
+  const invalidate = useThree((state) => state.invalidate);
+  const rendered = useRef(0);
+  useFrame(() => {
+    rendered.current += 1;
+    if (rendered.current < count) invalidate();
+  });
+  useEffect(() => invalidate(), [invalidate]);
+  return null;
 }
 
 function ReadySignal({ onReady }: { onReady: () => void }) {
@@ -46,7 +58,10 @@ export function SceneCanvas({
   eventSource,
   cameraPosition = [6, 1.2, 6],
   fov = 30,
+  renderOnDemand = false,
 }: {
+  /** Renderiza só quando necessário (captura de imagens): evita desenhar quadros contínuos. */
+  renderOnDemand?: boolean;
   children: ReactNode;
   visible: boolean;
   quality: RenderQuality;
@@ -59,9 +74,9 @@ export function SceneCanvas({
   return (
     <Canvas
       className="!absolute inset-0"
-      frameloop={visible ? "always" : "never"}
+      frameloop={!visible ? "never" : renderOnDemand ? "demand" : "always"}
       dpr={quality.dpr}
-      shadows={quality.shadows}
+      shadows={quality.shadows ? "percentage" : false}
       camera={{ position: cameraPosition, fov, near: 0.1, far: 80 }}
       gl={{ antialias: true, powerPreference: "high-performance", alpha: false, preserveDrawingBuffer: false }}
       onCreated={({ gl }) => {
@@ -79,6 +94,7 @@ export function SceneCanvas({
       </PerformanceMonitor>
       <Suspense fallback={null}>
         {children}
+        {renderOnDemand && <WarmupFrames count={8} />}
         <ReadySignal onReady={onReady} />
       </Suspense>
     </Canvas>

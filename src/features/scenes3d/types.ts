@@ -30,5 +30,7 @@ export interface SceneDefinition {
   cameraMoments: string[];
   /** Exige um modelo GLB informado pelo usuário. */
   requiresModel: boolean;
+  /** Variações oferecidas no editor (campo scene.variant). */
+  variants?: Array<{ id: string; label: string }>;
   load: () => Promise<{ default: React.ComponentType<SceneComponentProps> }>;
 }

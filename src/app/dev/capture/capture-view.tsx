@@ -17,6 +17,7 @@ const BASE: SceneSettings = {
   environment: "studio",
   fallbackImage: { src: "", alt: "" },
   modelSrc: "",
+  variant: "",
 };
 
 export function CaptureView({ shotId }: { shotId: string }) {

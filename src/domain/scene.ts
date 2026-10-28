@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { hexColorSchema, imageRefSchema, mediaSrcSchema } from "./primitives";
 
-export const SCENE_IDS = ["garage-car", "eyewear", "silk-flow", "custom-model"] as const;
+export const SCENE_IDS = ["garage-car", "eyewear", "sneaker", "silk-flow", "custom-model"] as const;
 export const sceneIdSchema = z.enum(SCENE_IDS);
 export type SceneId = z.infer<typeof sceneIdSchema>;
 
@@ -20,5 +20,10 @@ export const sceneSchema = z.object({
   fallbackImage: imageRefSchema,
   /** Modelo GLB próprio (usado pela cena "custom-model"). */
   modelSrc: mediaSrcSchema,
+  /**
+   * Variação visual própria de cada cena (ex.: formato da armação na vitrine de óculos).
+   * Padrão vazio mantém projetos gravados antes deste campo válidos.
+   */
+  variant: z.string().max(30).regex(/^[a-z0-9-]*$/).default(""),
 });
 export type SceneSettings = z.infer<typeof sceneSchema>;

@@ -17,10 +17,24 @@ export const SCENES: Record<SceneId, SceneDefinition> = {
   eyewear: {
     id: "eyewear",
     label: "Vitrine de óculos",
-    description: "Armação procedural com lentes de vidro, giro suave e luz de vitrine.",
-    cameraMoments: ["Frontal", "Perfil", "Detalhe da haste", "Três-quartos"],
+    description: "Armação procedural com lentes de vidro sobre pedestal de vitrine.",
+    cameraMoments: ["Três-quartos", "Frontal", "Detalhe da haste", "Vista traseira"],
     requiresModel: false,
+    variants: [
+      { id: "square", label: "Armação quadrada" },
+      { id: "round", label: "Armação redonda" },
+      { id: "cat", label: "Armação gatinho" },
+      { id: "aviator", label: "Aviador (lentes escuras)" },
+    ],
     load: () => import("./scenes/eyewear/eyewear-scene"),
+  },
+  sneaker: {
+    id: "sneaker",
+    label: "Tênis em destaque",
+    description: "Tênis procedural flutuando sobre pedestal iluminado, com cores configuráveis.",
+    cameraMoments: ["Três-quartos", "Perfil", "Bico", "Vista superior"],
+    requiresModel: false,
+    load: () => import("./scenes/sneaker/sneaker-scene"),
   },
   "silk-flow": {
     id: "silk-flow",

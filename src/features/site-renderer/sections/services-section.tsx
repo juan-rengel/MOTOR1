@@ -16,7 +16,7 @@ export function ServicesSection({ section }: { section: SectionOf<"services"> })
           <Reveal as="ul" stagger className="grid border-t border-l border-site-border sm:grid-cols-2 lg:grid-cols-3">
             {p.items.map((item, i) => (
               <li key={item.id} className="group relative border-r border-b border-site-border bg-site-bg p-8 transition-colors duration-500 hover:bg-site-surface md:p-10">
-                <span className="absolute top-8 right-8 font-mono text-xs text-site-muted/60 md:top-10 md:right-10">{String(i + 1).padStart(2, "0")}</span>
+                <span className="absolute top-8 right-8 font-mono text-xs text-site-muted md:top-10 md:right-10">{String(i + 1).padStart(2, "0")}</span>
                 <span className="mb-8 flex size-12 items-center justify-center rounded-[var(--site-radius)] border border-site-border text-site-primary transition-[transform,border-color,background-color] duration-500 group-hover:-rotate-6 group-hover:border-site-primary group-hover:bg-site-primary group-hover:text-site-on-primary">
                   <SiteIcon id={item.icon} className="size-5" />
                 </span>

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { ContactShadows, MeshReflectorMaterial, Sparkles } from "@react-three/drei";
+import { MeshReflectorMaterial, Sparkles } from "@react-three/drei";
 import { Color, MathUtils, SpotLight, Object3D } from "three";
 import { useMemo } from "react";
 import { CinematicCamera, type CameraKey } from "../../shared/camera-rig";
@@ -52,7 +52,6 @@ function SceneContent({ settings, progress, background, tier, reducedMotion, cam
       <StudioEnvironment preset={settings.environment} accent={settings.accentColor} />
       <CarModel paint={settings.primaryColor} accent={settings.accentColor} lights={lights} spin={spin} />
       <GroundOcclusion width={6.2} depth={3.2} opacity={0.9} />
-      <ContactShadows position={[0, 0.006, 0]} scale={11} blur={2.6} far={2.2} opacity={0.8} resolution={512} frames={1} />
 
       <mesh rotation-x={-Math.PI / 2} receiveShadow={quality.shadows}>
         <circleGeometry args={[34, 64]} />
@@ -95,7 +94,7 @@ function SceneContent({ settings, progress, background, tier, reducedMotion, cam
 export default function GarageCarScene(props: SceneComponentProps) {
   const quality = resolveQuality(props.settings.quality, props.tier);
   return (
-    <SceneCanvas visible={props.visible} quality={quality} background={props.background} onReady={props.onReady} eventSource={props.eventSource} cameraPosition={[6.5, 1.3, 5]} fov={30}>
+    <SceneCanvas visible={props.visible} quality={quality} background={props.background} onReady={props.onReady} eventSource={props.eventSource} renderOnDemand={Boolean(props.cameraOverride)} cameraPosition={[6.5, 1.3, 5]} fov={30}>
       <SceneContent {...props} />
     </SceneCanvas>
   );

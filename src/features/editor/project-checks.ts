@@ -77,6 +77,8 @@ export function checkProject(project: Project, sectionLabel: (s: Section) => str
     ["texto sobre o fundo", theme.colors.text, theme.colors.background, 4.5],
     ["texto secundário sobre o fundo", theme.colors.muted, theme.colors.background, 4.5],
     ["texto dos botões principais", theme.colors.onPrimary, theme.colors.primary, 4.5],
+    // A cor principal também aparece como texto (sobretítulos, preços, ícones).
+    ["texto na cor principal sobre o fundo", theme.colors.primary, theme.colors.background, 4.5],
   ];
   for (const [label, fg, bg, min] of pairs) {
     const ratio = contrastRatio(fg, bg);

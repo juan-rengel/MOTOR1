@@ -18,15 +18,13 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const baseUrl = process.env.CAPTURE_URL ?? "http://127.0.0.1:3000";
 
-// Lista de enquadramentos lida do próprio código-fonte (fonte única de verdade).
-const { readFile } = await import("node:fs/promises");
-const source = await readFile(path.join(root, "src/features/scenes3d/demo-shots.ts"), "utf8");
-const shots = [...source.matchAll(/id: "([^"]+)", file: "([^"]+)", width: (\d+), height: (\d+)/g)].map((m) => ({
-  id: m[1],
-  file: m[2],
-  width: Number(m[3]),
-  height: Number(m[4]),
-}));
+// Lista de enquadramentos servida pelo próprio app em desenvolvimento (fonte única: demo-shots.ts).
+const response = await fetch(`${baseUrl}/dev/capture/shots`).catch(() => null);
+if (!response?.ok) {
+  console.error(`Não foi possível obter a lista em ${baseUrl}/dev/capture/shots. O servidor de desenvolvimento está rodando (npm run dev)?`);
+  process.exit(1);
+}
+const shots = await response.json();
 const only = process.argv.slice(2);
 const selected = only.length ? shots.filter((s) => only.includes(s.id)) : shots;
 if (selected.length === 0) {

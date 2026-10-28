@@ -67,6 +67,7 @@ export const mechanicTemplate: TemplateDefinition = {
     environment: "studio",
     fallbackImage: { src: `${IMG}/hero-poster.jpg`, alt: "Carro esportivo em estúdio com iluminação dramática" },
     modelSrc: "",
+    variant: "",
   }),
   buildSections: (ctx) => {
     const { business, copy } = ctx;

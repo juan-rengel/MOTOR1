@@ -18,4 +18,27 @@ export const DEMO_ASSETS: AssetRecord[] = [
   demo("mech-wheel", "image", "Roda e freio", "/assets/demo/mechanic/wheel.jpg", "Close de roda esportiva e pinça de freio"),
   demo("mech-headlight", "image", "Farol", "/assets/demo/mechanic/headlight.jpg", "Close do farol de um carro esportivo"),
   demo("mech-top", "image", "Carro — vista superior", "/assets/demo/mechanic/car-top.jpg", "Carro esportivo visto do alto em estúdio"),
+  demo("optics-hero", "image", "Armação em vitrine (capa)", "/assets/demo/optics/hero-poster.jpg", "Armação de óculos sobre pedestal de vitrine"),
+  ...(
+    [
+      ["square-black", "Armação quadrada preta"],
+      ["round-tortoise", "Armação redonda tartaruga"],
+      ["cat-burgundy", "Armação gatinho bordô"],
+      ["aviator-gold", "Óculos aviador dourado com lentes escuras"],
+      ["square-crystal", "Armação quadrada translúcida"],
+      ["round-navy", "Armação redonda azul-marinho"],
+    ] as const
+  ).map(([id, alt]) => demo(`optics-${id}`, "image", alt, `/assets/demo/optics/frame-${id}.jpg`, alt)),
+  demo("optics-detail-front", "image", "Armação — frente", "/assets/demo/optics/detail-front.jpg", "Armação de óculos vista de frente"),
+  demo("optics-detail-lens", "image", "Armação — lentes", "/assets/demo/optics/detail-lens.jpg", "Detalhe das lentes de uma armação"),
+  demo("optics-detail-hinge", "image", "Armação — dobradiça", "/assets/demo/optics/detail-hinge.jpg", "Detalhe da dobradiça de uma armação"),
+  demo("silk-hero", "image", "Tecido acetinado (capa)", "/assets/demo/fashion/silk-hero.jpg", "Tecido acetinado rosa ondulando"),
+  ...(["rose", "navy", "emerald", "amber", "black", "pearl"] as const).map((c) => demo(`silk-${c}`, "texture", `Tecido ${c}`, `/assets/demo/fashion/silk-${c}.jpg`, `Tecido acetinado (${c})`)),
+  demo("silk-look-1", "image", "Lookbook 1", "/assets/demo/fashion/look-1.jpg", "Tecido acetinado coral em close"),
+  demo("silk-look-2", "image", "Lookbook 2", "/assets/demo/fashion/look-2.jpg", "Tecido acetinado azul-noite"),
+  demo("sneaker-hero", "image", "Tênis em destaque (capa)", "/assets/demo/fashion/sneaker-hero.jpg", "Tênis branco com detalhes rosa sobre pedestal"),
+  ...(["white-rose", "black-cyan", "navy-orange", "sand-green", "red-white", "grey-violet"] as const).map((c) => demo(`sneaker-${c}`, "image", `Tênis ${c}`, `/assets/demo/fashion/sneaker-${c}.jpg`, `Tênis (${c.replace("-", " e ")})`)),
+  demo("sneaker-detail", "image", "Tênis — bico", "/assets/demo/fashion/sneaker-detail.jpg", "Detalhe do bico de um tênis"),
+  demo("sneaker-top", "image", "Tênis — vista superior", "/assets/demo/fashion/sneaker-top.jpg", "Tênis visto de cima"),
+  demo("model-chair", "model", "Cadeira de design (GLB)", "/assets/demo/models/chair.glb", "Cadeira com estrutura de madeira e assento estofado"),
 ];
