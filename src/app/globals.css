@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+/*
+ * Dois sistemas visuais convivem aqui:
+ * 1) STUDIO (interface administrativa): tokens "ink", "line", "cyan".
+ * 2) SITES GERADOS: tokens "site-*", alimentados por variáveis CSS que o
+ *    renderizador define a partir do tema de cada projeto.
+ */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --color-ink-950: #06080a;
+  --color-ink-900: #0b0e12;
+  --color-ink-850: #10141a;
+  --color-ink-800: #151a21;
+  --color-ink-700: #1d242d;
+  --color-ink-600: #29323d;
+  --color-line: #222a34;
+  --color-line-strong: #33404d;
+  --color-fg: #e8edf2;
+  --color-fg-muted: #9aa6b2;
+  --color-fg-subtle: #6c7885;
+  --color-cyan-glow: #22d3ee;
+  --color-cyan-soft: #67e8f9;
+  --color-cyan-deep: #0891b2;
+  --color-danger: #f87171;
+  --color-warn: #fbbf24;
+  --color-ok: #34d399;
+
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-fade-in: fade-in 0.4s var(--ease-cinematic) both;
+  --animate-rise: rise 0.6s var(--ease-cinematic) both;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Tokens dos sites gerados — valores vêm do tema do projeto (style inline). */
+@theme inline {
+  --color-site-bg: var(--site-bg);
+  --color-site-surface: var(--site-surface);
+  --color-site-text: var(--site-text);
+  --color-site-muted: var(--site-muted);
+  --color-site-primary: var(--site-primary);
+  --color-site-on-primary: var(--site-on-primary);
+  --color-site-accent: var(--site-accent);
+  --color-site-border: var(--site-border);
+  --font-site-heading: var(--site-font-heading);
+  --font-site-body: var(--site-font-body);
+  --radius-site: var(--site-radius);
+  --radius-site-lg: var(--site-radius-lg);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ink-950);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-cyan-glow) 35%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cyan-glow);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Fundo técnico do Studio: grade sutil. */
+.studio-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-line) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-line) 55%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-600) transparent;
+}
+
+/* Antes da hidratação (ver site-motion-script.ts): elementos animáveis começam ocultos. */
+.cws-js [data-reveal] {
+  opacity: 0;
+}
