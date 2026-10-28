@@ -42,7 +42,7 @@ const frames: Array<[string, string, string]> = [
   ["round-navy", "round", "#1d3b4f"],
 ];
 DEMO_SHOTS.push(
-  { id: "optics-hero", file: "assets/demo/optics/hero-poster.jpg", width: 1600, height: 900, background: OPTICS_BG, scene: eyewear("square", "#3b2a20"), camera: { azimuth: 62, elevation: 10, radius: 4.6, target: [0, -0.15, -0.3], fov: 30, shift: -5 } },
+  { id: "optics-hero", file: "assets/demo/optics/hero-poster.jpg", width: 1600, height: 900, background: OPTICS_BG, scene: eyewear("square", "#3b2a20"), camera: { azimuth: 62, elevation: 10, radius: 6.4, target: [0, -0.1, -0.3], fov: 30, shift: -8 } },
   ...frames.map(([name, variant, color]) => ({ id: `optics-${name}`, file: `assets/demo/optics/frame-${name}.jpg`, width: 900, height: 1125, background: "#efe9df", scene: eyewear(variant, color), camera: FRAME_CAM })),
   { id: "optics-detail-front", file: "assets/demo/optics/detail-front.jpg", width: 1200, height: 900, background: OPTICS_BG, scene: eyewear("cat", "#6d1a2c"), camera: { azimuth: 90, elevation: 4, radius: 2.7, target: [0, 0.1, 0.35], fov: 28 } },
   { id: "optics-detail-lens", file: "assets/demo/optics/detail-lens.jpg", width: 1200, height: 900, background: OPTICS_BG, scene: eyewear("round", "#6b3f22"), camera: { azimuth: 70, elevation: 14, radius: 1.8, target: [0.36, 0.1, 0.35], fov: 28 } },

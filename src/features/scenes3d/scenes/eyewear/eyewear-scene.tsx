@@ -9,8 +9,8 @@ import { createBridgeGeometry, createBrowBarGeometry, createLensGeometry, create
 
 /** Momentos: três-quartos → frontal → detalhe da dobradiça → traseira. A frente da armação aponta para +Z. */
 const CAMERA_KEYS: CameraKey[] = [
-  { azimuth: 62, elevation: 10, radius: 4.6, target: [0, -0.15, -0.3], fov: 30, shift: -5 },
-  { azimuth: 90, elevation: 3, radius: 3.1, target: [0, 0, 0], fov: 28, shift: -4 },
+  { azimuth: 62, elevation: 10, radius: 6.4, target: [0, -0.1, -0.3], fov: 30, shift: -8 },
+  { azimuth: 90, elevation: 3, radius: 4.4, target: [0, 0, 0], fov: 28, shift: -6 },
   { azimuth: 28, elevation: 8, radius: 2.3, target: [0.62, 0.08, -0.25], fov: 28, shift: -3 },
   { azimuth: 150, elevation: 20, radius: 4.2, target: [0, -0.1, -0.5], fov: 30, shift: -4 },
 ];
