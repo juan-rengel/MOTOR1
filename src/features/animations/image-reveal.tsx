@@ -3,7 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import { ensureGsap, gsap, useGSAP } from "./gsap";
 import { useMotion } from "./motion-context";
-import { EASE, REVEAL_START } from "./tokens";
+import { EASE, PLAY_ONCE, REVEAL_START } from "./tokens";
 
 /**
  * Revelação de imagem: a máscara abre (clip-path) enquanto a imagem desacelera
@@ -32,7 +32,7 @@ export function ImageReveal({
       ensureGsap();
       const media = el.querySelector<HTMLElement>("[data-reveal-media]") ?? el.firstElementChild;
       const clipFrom = { up: "inset(100% 0% 0% 0%)", left: "inset(0% 100% 0% 0%)", right: "inset(0% 0% 0% 100%)" }[direction];
-      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: REVEAL_START, once: true } });
+      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: REVEAL_START, toggleActions: PLAY_ONCE } });
       tl.set(el, { opacity: 1 });
       tl.fromTo(el, { clipPath: clipFrom }, { clipPath: "inset(0% 0% 0% 0%)", duration: profile.duration * 1.4, ease: EASE.inOut });
       if (media) {

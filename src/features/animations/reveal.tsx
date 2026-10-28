@@ -3,7 +3,7 @@
 import { useRef, type ElementType, type ReactNode, type ComponentPropsWithoutRef } from "react";
 import { ensureGsap, gsap, useGSAP } from "./gsap";
 import { useMotion } from "./motion-context";
-import { EASE, REVEAL_START } from "./tokens";
+import { EASE, PLAY_ONCE, REVEAL_START } from "./tokens";
 
 type RevealVariant = "fade-up" | "fade" | "scale" | "slide-left" | "slide-right";
 
@@ -60,7 +60,7 @@ export function Reveal<T extends ElementType = "div">({
         delay,
         ease: EASE.out,
         stagger: stagger ? profile.stagger : 0,
-        scrollTrigger: { trigger: el, start: REVEAL_START, once: true },
+        scrollTrigger: { trigger: el, start: REVEAL_START, toggleActions: PLAY_ONCE },
         clearProps: "transform",
       });
     },

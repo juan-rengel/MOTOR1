@@ -4,7 +4,7 @@ import { useRef, type ElementType } from "react";
 import { cn } from "@/lib/cn";
 import { ensureGsap, gsap, useGSAP } from "./gsap";
 import { useMotion } from "./motion-context";
-import { EASE, REVEAL_START } from "./tokens";
+import { EASE, PLAY_ONCE, REVEAL_START } from "./tokens";
 
 /**
  * Título com revelação palavra a palavra (cada palavra sobe de dentro de uma
@@ -51,7 +51,7 @@ export function SplitText({
           ease: EASE.expo,
           stagger: profile.stagger * 0.8,
           delay,
-          scrollTrigger: immediate ? undefined : { trigger: el, start: REVEAL_START, once: true },
+          scrollTrigger: immediate ? undefined : { trigger: el, start: REVEAL_START, toggleActions: PLAY_ONCE },
         },
       );
     },

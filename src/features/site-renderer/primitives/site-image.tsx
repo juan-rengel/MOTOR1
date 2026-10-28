@@ -27,8 +27,10 @@ export function SiteImage({
 }) {
   const [failed, setFailed] = useState(false);
   const missing = !image.src || failed;
+  // Só aplica "relative" quando quem usa não definiu outro posicionamento (evita conflito com "absolute").
+  const positioned = /\b(absolute|fixed|sticky)\b/.test(className ?? "");
   return (
-    <div className={cn("relative overflow-hidden bg-site-surface", className)} style={ratio ? { aspectRatio: ratio } : undefined}>
+    <div className={cn(!positioned && "relative", "overflow-hidden bg-site-surface", className)} style={ratio ? { aspectRatio: ratio } : undefined}>
       {missing ? (
         <div
           className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-site-muted"

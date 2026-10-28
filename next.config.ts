@@ -32,7 +32,14 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Arquivos enviados: nunca interpretados como página (a última regra prevalece).
+      {
+        source: "/api/assets/:id/file",
+        headers: [{ key: "Content-Security-Policy", value: "default-src 'none'; sandbox; frame-ancestors 'self'" }],
+      },
+    ];
   },
 };
 

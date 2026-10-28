@@ -67,7 +67,7 @@ export class FileAssetStore {
       createdAt: new Date().toISOString(),
     });
     await fs.mkdir(this.dir, { recursive: true });
-    await writeFileAtomic(path.join(this.dir, `${id}.${check.type.ext}`), bytes);
+    await writeFileAtomic(path.join(/*turbopackIgnore: true*/ this.dir, `${id}.${check.type.ext}`), bytes);
     await writeFileAtomic(this.metaFile(id), JSON.stringify(record, null, 2));
     return record;
   }
@@ -75,7 +75,7 @@ export class FileAssetStore {
   async delete(ownerId: string, id: string): Promise<boolean> {
     const record = await this.get(ownerId, id);
     if (!record) return false;
-    await fs.rm(path.join(this.dir, `${id}.${extFromMime(record.mimeType)}`), { force: true });
+    await fs.rm(path.join(/*turbopackIgnore: true*/ this.dir, `${id}.${extFromMime(record.mimeType)}`), { force: true });
     await fs.rm(this.metaFile(id), { force: true });
     return true;
   }
@@ -84,12 +84,12 @@ export class FileAssetStore {
   async open(ownerId: string, id: string, range?: { start: number; end?: number }) {
     const record = await this.get(ownerId, id);
     if (!record) return null;
-    const file = path.join(this.dir, `${id}.${extFromMime(record.mimeType)}`);
-    const stat = await fs.stat(file).catch(() => null);
+    const file = path.join(/*turbopackIgnore: true*/ this.dir, `${id}.${extFromMime(record.mimeType)}`);
+    const stat = await fs.stat(/*turbopackIgnore: true*/ file).catch(() => null);
     if (!stat) return null;
     const start = range?.start ?? 0;
     const end = Math.min(range?.end ?? stat.size - 1, stat.size - 1);
-    const stream = Readable.toWeb(createReadStream(file, { start, end })) as ReadableStream<Uint8Array>;
+    const stream = Readable.toWeb(createReadStream(/*turbopackIgnore: true*/ file, { start, end })) as ReadableStream<Uint8Array>;
     return { record, stream, size: stat.size, start, end };
   }
 }

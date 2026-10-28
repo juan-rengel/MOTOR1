@@ -6,7 +6,8 @@ import type { ProjectRepository } from "./project-repository";
 
 /** Diretório de dados locais (projetos e uploads). Configurável por CWS_DATA_DIR. */
 export function getDataDir(): string {
-  return path.resolve(process.cwd(), process.env.CWS_DATA_DIR || ".data");
+  // Dados de execução: não devem ser incluídos no pacote do servidor (turbopackIgnore).
+  return path.resolve(/*turbopackIgnore: true*/ process.cwd(), process.env.CWS_DATA_DIR || ".data");
 }
 
 let repository: ProjectRepository | null = null;

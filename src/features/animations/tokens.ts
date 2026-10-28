@@ -35,3 +35,11 @@ export const LEVEL_PROFILES: Record<MotionLevel, LevelProfile> = {
 
 /** Gatilho padrão: anima quando o topo do elemento cruza 85% da altura da janela. */
 export const REVEAL_START = "top 85%";
+
+/**
+ * Toca a animação uma vez ao entrar e não reverte.
+ * Preferido a `once: true`: gatilhos com `once` se removem durante
+ * ScrollTrigger.refresh() quando a página abre já rolada (ex.: link com #âncora),
+ * o que quebra a atualização dos demais gatilhos.
+ */
+export const PLAY_ONCE = "play none none none";
