@@ -18,6 +18,13 @@
 | 9 — Firebase | ⏸ Aguardando projeto | Contratos de repositório/identidade prontos. Falta criar o projeto Firebase. |
 | 10 — Testes e publicação | 🟡 Parcial | Testes completos executados; requisitos de publicação documentados. Hospedagem real não implementada. |
 
+## Plano de evolução (após o diagnóstico de 30/10/2026)
+
+| Etapa | Situação | Observações |
+|---|---|---|
+| 0 — Instruções e skills do Claude Code | ✅ Concluída (30/10/2026) | `CLAUDE.md` (regras permanentes), `.claude/settings.json` (permissões: verificação liberada; instalação, `npx`, commit, push e geração de mídia sob confirmação; segredos `.env`, recursos de demonstração existentes, publicação e comandos destrutivos bloqueados) e skills `novo-modelo-segmento`, `revisao-visual`, `verificar`, `recursos-demo`. Auditoria final com 10 correções aplicadas. `.gitignore` passa a ignorar `.claude/settings.local.json`. Nenhum componente, página, modelo, teste ou recurso alterado. |
+| 1 a 8 | ⏸ Aguardando aprovação | Cada etapa começa com plano apresentado e aprovação explícita. |
+
 ## Arquitetura atual
 
 Resumo em [`ARQUITETURA.md`](ARQUITETURA.md). Pontos centrais:
