@@ -15,7 +15,7 @@ Esta é a **primeira versão funcional**: roda localmente, sem contas externas e
 | Página inicial da plataforma | ✅ |
 | Painel de projetos (listar, abrir, visualizar, excluir com confirmação) | ✅ |
 | Assistente "Criar novo site" (negócio → estilo → modelo → revisão) | ✅ |
-| 12 segmentos configurados; 3 modelos completos (oficina mecânica, ótica, roupas/tênis) | ✅ |
+| 12 segmentos configurados; 3 modelos dedicados (oficina mecânica, ótica, roupas/tênis) e o modelo universal **Essencial** para os demais segmentos | ✅ |
 | 8 estilos visuais (cinematográfico, luxuoso, moderno, minimalista, industrial, tecnológico, elegante, vibrante) | ✅ |
 | Editor visual: seções (selecionar, reordenar, adicionar, duplicar, ocultar, remover com confirmação), textos, imagens, botões, links, cores, tipografia, logotipo | ✅ |
 | Desfazer/refazer, salvar (Ctrl+S), aviso de alterações não salvas, detecção de edição concorrente | ✅ |
@@ -152,7 +152,7 @@ src/
   domain/                   Tipos e validação (zod): projeto, seções, tema, cena, botões, recursos
   features/
     projects/               Painel e assistente de criação
-    templates/              Modelos (mecânica, ótica, moda) e criação de projetos
+    templates/              Modelos (mecânica, ótica, moda, Essencial) e criação de projetos
     sections/               Valores padrão de cada tipo de seção
     site-renderer/          Renderizador dos sites (seções, cabeçalho, rodapé, formulário)
     animations/             Motor de animações (GSAP + ScrollTrigger)
@@ -181,7 +181,7 @@ Detalhes técnicos em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 - **Modelos GLB com compressão Draco** não são carregados (exigiriam baixar o decodificador de um servidor externo); usam a imagem substituta.
 - **Upload de fontes, SVG e ícones próprios** ainda não é aceito (SVG é bloqueado por segurança).
 - **Desempenho medido apenas em navegador sem GPU** (ambiente de testes). Em aparelhos reais a cena 3D usa a placa de vídeo; a qualidade se ajusta automaticamente, mas não há medição de Lighthouse registrada.
-- Sem modelos dedicados (ainda) para advocacia, odontologia, móveis, academia, barbearia, restaurante e serviços — esses segmentos usam modelos adaptáveis.
+- Sem modelos dedicados (ainda) para advocacia, odontologia, móveis, academia, barbearia, restaurante, serviços e outros negócios — esses segmentos usam o modelo universal **Essencial** (textos do próprio segmento, sem imagens nem cena 3D). Modelos dedicados só podem ser usados no segmento para o qual foram desenhados.
 
 ## Próximas etapas
 

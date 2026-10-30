@@ -27,7 +27,12 @@ export interface TemplateDefinition {
   name: string;
   tagline: string;
   description: string;
-  /** Segmentos para os quais o modelo foi desenhado. */
+  /**
+   * "dedicated" (padrão): desenhado para os segmentos de `segments` e só aceito neles.
+   * "universal": base neutra aceita em qualquer segmento (sem conteúdo de um segmento específico).
+   */
+  kind?: "dedicated" | "universal";
+  /** Segmentos para os quais o modelo foi desenhado (vazio em modelos universais). */
   segments: SegmentId[];
   defaultStyle: VisualStyleId;
   /** Recursos de destaque exibidos na escolha do modelo. */

@@ -10,6 +10,7 @@ Todos os arquivos em `public/assets/demo/` foram **gerados por este projeto**:
 | `optics/` | Renderizações da cena de óculos (4 formatos de armação) | idem |
 | `fashion/` | Renderizações das cenas de tecido e de tênis | idem |
 | `models/chair.glb` | Modelo procedural exportado com o `GLTFExporter` do three.js | `npm run assets:model` |
+| `essential/preview.jpg` | Captura de tela da própria demonstração `/demo/universal-essential` (estilo moderno, 1600×900, JPEG 82, sem a faixa de aviso da demonstração). Gerada em 30/10/2026; sem conteúdo de terceiros | Capturar a demonstração com o Playwright (script temporário, fora do repositório) |
 
 Não há fotos, modelos ou texturas de terceiros. Os enquadramentos ficam em `src/features/scenes3d/demo-shots.ts`; o script `scripts/capture-demo-assets.mjs` abre `/dev/capture` (somente em desenvolvimento), espera a cena ficar pronta e salva JPEG.
 

@@ -68,7 +68,9 @@ export function useWizardState(initialSegment?: SegmentId) {
   }
 
   const { recommended, others } = templatesForSegment(business.segment);
-  const effectiveTemplateId = templateId ?? recommended[0]?.id ?? others[0]?.id ?? null;
+  // Só vale uma escolha oferecida para o segmento atual (o servidor recusa modelos de outros segmentos).
+  const offered = [...recommended, ...others];
+  const effectiveTemplateId = (templateId && offered.some((t) => t.id === templateId) ? templateId : null) ?? recommended[0]?.id ?? null;
 
   return {
     step,

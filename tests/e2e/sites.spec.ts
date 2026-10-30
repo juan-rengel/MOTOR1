@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { expectNoHorizontalOverflow, trackErrors } from "./helpers";
 
 /** Modelos disponíveis (manter em sincronia com src/features/templates/registry.ts). */
-const TEMPLATE_IDS = ["mechanic-cinematic", "optics-atelier", "fashion-editorial"];
+const TEMPLATE_IDS = ["mechanic-cinematic", "optics-atelier", "fashion-editorial", "universal-essential"];
 
 test.describe("sites gerados (demonstrações)", () => {
   for (const id of TEMPLATE_IDS) {
@@ -101,7 +101,7 @@ test.describe("cena de modelo próprio (GLB)", () => {
       data: {
         templateId: "mechanic-cinematic",
         style: "minimal",
-        business: { name: "Loja de Móveis Teste", segment: "furniture", city: "", description: "", offerings: [], audience: "", phone: "", whatsapp: "", email: "", address: "", hours: "", social: { instagram: "", facebook: "", tiktok: "", youtube: "", linkedin: "", website: "" }, goal: "catalog" },
+        business: { name: "Loja de Móveis Teste", segment: "mechanic", city: "", description: "", offerings: [], audience: "", phone: "", whatsapp: "", email: "", address: "", hours: "", social: { instagram: "", facebook: "", tiktok: "", youtube: "", linkedin: "", website: "" }, goal: "catalog" },
       },
     });
     const { project } = await created.json();

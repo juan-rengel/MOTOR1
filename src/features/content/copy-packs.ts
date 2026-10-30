@@ -98,6 +98,46 @@ const PACKS: Partial<Record<SegmentId, CopyPack>> = {
     aboutText: GENERIC.aboutText,
     whatsappMessage: (b) => `Olá, ${b.name}! Quero saber sobre planos e horários.`,
   },
+  beauty: {
+    heroTitles: ["Seu estilo, do seu jeito.", "Cuidado e estilo em cada atendimento.", "Reserve seu horário com tranquilidade."],
+    heroSubtitle: (b) =>
+      b.description || `Barbearia e salão${where(b)}. Conheça os serviços e agende seu horário pelo WhatsApp.`,
+    offeringDescription: (o) => `${o}: consulte disponibilidade e agende seu horário.`,
+    aboutText: (b) =>
+      b.description ||
+      `${b.name} atende${where(b)} com hora marcada. Edite este texto com a história real do espaço e da equipe.`,
+    whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de agendar um horário.`,
+  },
+  restaurant: {
+    heroTitles: ["Sabor para todos os momentos.", "Uma mesa esperando por você.", "Comida feita para ser lembrada."],
+    heroSubtitle: (b) =>
+      b.description || `Restaurante${where(b)}. Veja as opções e fale com a gente pelo WhatsApp.`,
+    offeringDescription: (o) => `${o}: consulte opções, dias e horários disponíveis.`,
+    aboutText: (b) =>
+      b.description ||
+      `${b.name} recebe você${where(b)}. Edite este texto com a história real da casa, da cozinha e das pessoas por trás dela.`,
+    whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de saber mais sobre o cardápio e os horários.`,
+  },
+  furniture: {
+    heroTitles: ["Ambientes que combinam com você.", "Móveis para viver bem cada espaço.", "Do projeto ao seu ambiente."],
+    heroSubtitle: (b) =>
+      b.description || `Loja de móveis${where(b)}. Conheça as opções e fale com a gente para tirar dúvidas.`,
+    offeringDescription: (o) => `${o}: consulte modelos, medidas e disponibilidade.`,
+    aboutText: (b) =>
+      b.description ||
+      `${b.name} ajuda você a escolher móveis para cada ambiente${where(b)}. Edite este texto com a história real da loja.`,
+    whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de saber mais sobre os móveis.`,
+  },
+  services: {
+    heroTitles: ["Serviço bem feito, do começo ao fim.", "Atendimento claro e combinado com você.", "Conte com a gente para resolver."],
+    heroSubtitle: (b) =>
+      b.description || `Prestação de serviços${where(b)}. Fale com a gente para tirar dúvidas ou solicitar um orçamento.`,
+    offeringDescription: (o) => `${o}: entenda como funciona e solicite um orçamento.`,
+    aboutText: (b) =>
+      b.description ||
+      `${b.name} atende${where(b)} com combinação clara do que será feito. Edite este texto com a história real do seu trabalho.`,
+    whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de solicitar um orçamento.`,
+  },
 };
 
 export function getCopyPack(segment: SegmentId): CopyPack {

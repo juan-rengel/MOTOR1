@@ -1,6 +1,7 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
+import { hasDedicatedTemplate } from "@/features/templates/registry";
 import type { TemplateDefinition } from "@/features/templates/types";
 import type { VisualStyleId } from "@/domain/theme";
 import { Badge, Notice } from "@/components/ui/misc";
@@ -80,7 +81,13 @@ export function StepTemplate({
       <p className="mt-1 mb-6 text-sm text-fg-muted">
         O modelo define a estrutura, as seções e a experiência cinematográfica. Conteúdo e visual continuam editáveis.
       </p>
-      {recommended.length > 0 ? (
+      {!hasDedicatedTemplate(segment) && (
+        <Notice tone="cyan" title="Ainda não há modelo exclusivo para este segmento" className="mb-6">
+          O modelo Essencial foi preparado com os textos de {segmentLabel(segment).toLowerCase()} e não traz imagens nem cena 3D
+          de outros negócios. Adicione suas fotos e ajuste tudo no editor.
+        </Notice>
+      )}
+      {recommended.length > 0 && (
         <>
           <h3 className="mb-3 text-xs font-medium tracking-wider text-cyan-glow uppercase">Recomendados para {segmentLabel(segment).toLowerCase()}</h3>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -89,15 +96,10 @@ export function StepTemplate({
             ))}
           </div>
         </>
-      ) : (
-        <Notice tone="warn" title="Ainda não há modelo dedicado a este segmento">
-          Os modelos abaixo podem ser adaptados: troque textos, imagens, seções e cores no editor. Novos modelos por segmento
-          estão previstos na arquitetura.
-        </Notice>
       )}
       {others.length > 0 && (
         <>
-          <h3 className="mt-8 mb-3 text-xs font-medium tracking-wider text-fg-subtle uppercase">Outros modelos (adaptáveis)</h3>
+          <h3 className="mt-8 mb-3 text-xs font-medium tracking-wider text-fg-subtle uppercase">Base neutra</h3>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {others.map((t) => (
               <TemplateCard key={t.id} template={t} style={style} active={t.id === value} onSelect={() => onChange(t.id)} />

@@ -24,6 +24,14 @@ test.describe("API e segurança", () => {
     expect(bad.status()).toBe(422);
   });
 
+  test("recusa modelo dedicado em segmento de outro negócio e aceita o Essencial", async ({ request }) => {
+    const mismatch = await request.post("/api/projects", { data: { templateId: "mechanic-cinematic", style: "modern", business: { ...business, segment: "dental" } } });
+    expect(mismatch.status()).toBe(422);
+    expect(JSON.stringify(await mismatch.json())).toContain("não foi feito para o segmento");
+    const universal = await request.post("/api/projects", { data: { templateId: "universal-essential", style: "modern", business: { ...business, segment: "dental" } } });
+    expect(universal.status()).toBe(201);
+  });
+
   test("bloqueia requisições de outra origem", async ({ request }) => {
     const res = await request.post("/api/projects", {
       data: { templateId: "mechanic-cinematic", style: "cinematic", business },

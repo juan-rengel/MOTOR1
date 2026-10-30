@@ -117,6 +117,49 @@ test.describe("fluxo de criação e edição", () => {
     await expect(page.getByRole("listitem").filter({ hasText: "Projeto Para Excluir" })).toHaveCount(0);
   });
 
+  test("segmento sem modelo dedicado usa o Essencial, sem conteúdo de outro segmento", async ({ page }) => {
+    const errors = trackErrors(page);
+    await page.goto("/studio/new");
+    await page.getByRole("radio", { name: /Advocacia/ }).click();
+    await page.getByLabel("Nome comercial").fill("Escritório Teste");
+    await page.getByRole("button", { name: "Continuar" }).click();
+    await page.getByRole("button", { name: "Continuar" }).click();
+    await expect(page.getByRole("heading", { name: "Modelo inicial" })).toBeVisible();
+
+    // Só o Essencial é oferecido; modelos de outros segmentos não aparecem.
+    const choices = page.getByRole("radiogroup", { name: "Modelo inicial" }).getByRole("radio");
+    await expect(choices).toHaveCount(1);
+    await expect(choices.first()).toContainText("Essencial");
+    await expect(choices.first()).toHaveAttribute("aria-checked", "true");
+    await expect(page.getByText("Ainda não há modelo exclusivo para este segmento")).toBeVisible();
+    await expect(page.getByText(/Outros modelos/)).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Continuar" }).click();
+    await page.getByRole("button", { name: "Criar site" }).click();
+    await page.waitForURL(/\/studio\/projects\/[0-9a-f-]{36}$/, { timeout: 30_000 });
+
+    const site = preview(page).locator(".site-root");
+    await expect(site).toContainText("Advocacia", { timeout: 30_000 });
+    const text = (await site.innerText()).toLowerCase();
+    for (const term of ["oficina", "carro", "armaç", "ótica", "coleção", "tênis"]) expect(text).not.toContain(term);
+    await expect(preview(page).locator('[data-section-type="sceneStory"]')).toHaveCount(0);
+    expect(errors).toEqual([]);
+  });
+
+  test("segmento com modelo dedicado oferece o dedicado e o Essencial, nunca de outro segmento", async ({ page }) => {
+    await page.goto("/studio/new");
+    await page.getByRole("radio", { name: /Ótica/ }).click();
+    await page.getByLabel("Nome comercial").fill("Ótica Teste");
+    await page.getByRole("button", { name: "Continuar" }).click();
+    await page.getByRole("button", { name: "Continuar" }).click();
+    const choices = page.getByRole("radiogroup", { name: "Modelo inicial" }).getByRole("radio");
+    await expect(choices).toHaveCount(2);
+    await expect(choices.nth(0)).toContainText("Ótica Atelier");
+    await expect(choices.nth(0)).toHaveAttribute("aria-checked", "true");
+    await expect(choices.nth(1)).toContainText("Essencial");
+    await expect(page.getByRole("radiogroup", { name: "Modelo inicial" })).not.toContainText("Garagem");
+  });
+
   test("valida campos obrigatórios e telefone no assistente", async ({ page }) => {
     await page.goto("/studio/new");
     await page.getByLabel("WhatsApp").fill("123");

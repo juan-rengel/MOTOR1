@@ -76,11 +76,19 @@ Para criar um tipo novo: schema em `domain/sections.ts` → padrão em `features
 
 `src/features/templates/*.ts` implementam `TemplateDefinition`: segmentos, estilo padrão, ajustes de tema por estilo, cena 3D, seções iniciais (usando os dados do negócio quando informados) e um negócio fictício para a demonstração. Registro em `registry.ts`.
 
+Há dois tipos de modelo (`kind`):
+
+- **dedicado** (padrão): traz textos, imagens e cena 3D do próprio segmento e **só pode ser usado nos segmentos de `segments`**. O assistente oferece apenas os dedicados ao segmento escolhido, e o servidor recusa outras combinações (`isTemplateCompatible`, verificado em `createProjectFromTemplate`; resposta 422).
+- **universal**: base neutra aceita em qualquer segmento. O **Essencial** (`universal-essential`) usa só os textos do segmento escolhido e os dados do negócio, sem imagens e sem cena 3D. É o recomendado para segmentos sem modelo dedicado e aparece como "Base neutra" nos demais.
+
+Projetos criados antes dessa regra continuam abrindo e editando normalmente: a verificação vale apenas na criação.
+
 | Modelo | Segmentos | Cena | Estrutura |
 |---|---|---|---|
 | Garagem Cinematográfica | Oficina mecânica | Carro | História 3D, faixa, serviços, processo, estrutura, sobre, dúvidas, orçamento, contato |
 | Ótica Atelier | Ótica | Óculos (4 formatos) | História 3D, catálogo de armações, editorial de atendimento, passo a passo, sobre, dúvidas, chamada, contato |
 | Coleção Editorial | Roupas e tênis | Tecido (roupas) ou tênis | História 3D, faixa, catálogo com pedido, lookbook, galeria, como comprar, dúvidas, chamada, contato |
+| Essencial (universal) | Todos (recomendado para os segmentos sem modelo dedicado) | Nenhuma | Capa em degradê, serviços, como funciona, sobre, dúvidas, chamada, contato |
 
 ## Motor de animações (`features/animations`)
 

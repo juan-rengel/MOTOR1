@@ -4,7 +4,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/misc";
 import { segmentLabel, styleLabel } from "@/config/labels";
 import { SEGMENTS } from "@/config/segments";
-import { TEMPLATES } from "@/features/templates/registry";
+import { TEMPLATES, isUniversalTemplate } from "@/features/templates/registry";
 
 export const metadata = { title: "Modelos" };
 
@@ -26,11 +26,15 @@ export default function TemplatesPage() {
             </div>
             <div className="p-5">
               <div className="mb-2 flex flex-wrap gap-1.5">
-                {t.segments.map((s) => (
-                  <Badge key={s} tone="cyan">
-                    {segmentLabel(s)}
-                  </Badge>
-                ))}
+                {isUniversalTemplate(t) ? (
+                  <Badge tone="cyan">Todos os segmentos</Badge>
+                ) : (
+                  t.segments.map((s) => (
+                    <Badge key={s} tone="cyan">
+                      {segmentLabel(s)}
+                    </Badge>
+                  ))
+                )}
                 <Badge>Estilo padrão: {styleLabel(t.defaultStyle)}</Badge>
               </div>
               <h2 className="font-display text-lg font-semibold">{t.name}</h2>
@@ -50,14 +54,15 @@ export default function TemplatesPage() {
       <section className="mt-12">
         <h2 className="mb-3 font-display text-lg font-semibold">Cobertura por segmento</h2>
         <p className="mb-4 max-w-2xl text-sm text-fg-muted">
-          Segmentos sem modelo dedicado podem usar e adaptar os modelos existentes. Novos modelos entram registrando um arquivo em
+          Segmentos sem modelo dedicado usam o modelo Essencial, com os textos do próprio segmento. Modelos dedicados só são
+          oferecidos ao segmento para o qual foram desenhados. Novos modelos entram registrando um arquivo em
           <code className="mx-1 text-fg">src/features/templates</code>.
         </p>
         <ul className="flex flex-wrap gap-2">
           {SEGMENTS.map((s) => (
             <li key={s.id}>
               <Badge tone={covered.has(s.id) ? "ok" : "neutral"}>
-                {s.label}: {covered.has(s.id) ? "modelo dedicado" : "adaptável"}
+                {s.label}: {covered.has(s.id) ? "modelo dedicado" : "modelo Essencial"}
               </Badge>
             </li>
           ))}

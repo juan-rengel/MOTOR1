@@ -8,7 +8,7 @@ import { PROJECT_SCHEMA_VERSION, projectSchema, type Project } from "@/domain/pr
 import { visualStyleIdSchema, type SiteTheme, type VisualStyleId } from "@/domain/theme";
 import { getCopyPack } from "@/features/content/copy-packs";
 import { slugify, uuid } from "@/lib/ids";
-import { getTemplate } from "./registry";
+import { getTemplate, isTemplateCompatible } from "./registry";
 import type { TemplateDefinition, ThemeTweak } from "./types";
 
 export const createProjectInputSchema = z.object({
@@ -53,6 +53,10 @@ export function createProjectFromTemplate(
   if (!template) throw validationError("Modelo não encontrado.");
 
   const business = businessSchema.parse(input.business);
+  // Modelos dedicados trazem textos, imagens e cena 3D do próprio segmento: em outro segmento, o site sairia errado.
+  if (!isTemplateCompatible(template, business.segment)) {
+    throw validationError("Este modelo não foi feito para o segmento escolhido. Use o modelo Essencial.");
+  }
   const ctx = {
     business,
     style: input.style,
