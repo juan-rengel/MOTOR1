@@ -23,6 +23,20 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   reactStrictMode: true,
+  /**
+   * Otimizador de imagens nativo (sem dependência nova). Só otimiza as imagens de
+   * demonstração (/assets/demo, sem query string); qualquer outro caminho recebe 400.
+   *
+   * Uploads (/api/assets/<id>/file) NÃO passam pelo otimizador: as versões otimizadas
+   * ficam em cache e continuariam acessíveis depois que o arquivo fosse excluído
+   * (verificado na Etapa 1B). A otimização segura dos uploads será reavaliada na
+   * Fase 9, junto com o armazenamento em nuvem. URLs externas também não passam aqui.
+   */
+  images: {
+    localPatterns: [{ pathname: "/assets/demo/**", search: "" }],
+    formats: ["image/webp"],
+    qualities: [75],
+  },
   turbopack: {
     rules: {
       "*.css": {

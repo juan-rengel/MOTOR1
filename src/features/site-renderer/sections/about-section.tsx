@@ -36,7 +36,7 @@ export function AboutSection({ section }: { section: SectionOf<"about"> }) {
         </div>
         {hasImage && (
           <ImageReveal className="overflow-hidden rounded-[var(--site-radius-lg)]">
-            <SiteImage image={p.image} ratio="4/5" />
+            <SiteImage image={p.image} ratio="4/5" sizes="(min-width: 768px) 50vw, 100vw" />
           </ImageReveal>
         )}
       </div>

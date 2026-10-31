@@ -109,12 +109,16 @@ test.describe("regressão visual (demonstrações)", () => {
   }
 });
 
-/** Valores calculados pelo navegador para a granulação (src/features/site-renderer/site.css), a 1440×900. */
+/**
+ * Valores calculados pelo navegador para a granulação (src/features/site-renderer/site.css).
+ * O deslocamento (inset: -50%) às vezes vem em pixels e às vezes em porcentagem, conforme o
+ * momento da leitura: o teste converte para porcentagem da tela antes de comparar.
+ */
 const GRAIN = {
   content: '""',
   position: "fixed",
-  top: "-450px",
-  left: "-720px",
+  top: "-50%",
+  left: "-50%",
   zIndex: "60",
   pointerEvents: "none",
   opacity: "0.06",
@@ -136,8 +140,8 @@ test.describe("granulação de filme (oculta nas capturas, verificada aqui)", ()
           return {
             content: s.content,
             position: s.position,
-            top: s.top,
-            left: s.left,
+            top: s.top.endsWith("px") ? `${Math.round((parseFloat(s.top) / window.innerHeight) * 100)}%` : s.top,
+            left: s.left.endsWith("px") ? `${Math.round((parseFloat(s.left) / window.innerWidth) * 100)}%` : s.left,
             zIndex: s.zIndex,
             pointerEvents: s.pointerEvents,
             opacity: s.opacity,

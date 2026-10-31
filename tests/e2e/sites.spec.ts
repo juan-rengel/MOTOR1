@@ -13,7 +13,14 @@ test.describe("sites gerados (demonstrações)", () => {
       const errors = trackErrors(page);
       const missing: string[] = [];
       page.on("response", (r) => {
-        if (r.status() === 404 && r.url().includes("/assets/")) missing.push(r.url());
+        // Imagens otimizadas chegam por /_next/image?url=%2Fassets%2F... — decodifica para não deixar escapar.
+        let url = r.url();
+        try {
+          url = decodeURIComponent(url);
+        } catch {
+          // URL com sequência "%" inválida: compara como veio.
+        }
+        if (r.status() >= 400 && url.includes("/assets/")) missing.push(`${r.status()} ${url}`);
       });
       await page.goto(`/demo/${id}`);
       await expect(page.locator("h1").first()).toBeVisible();

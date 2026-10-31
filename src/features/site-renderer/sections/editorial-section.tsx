@@ -23,7 +23,7 @@ export function EditorialSection({ section }: { section: SectionOf<"editorial"> 
                   <ImageReveal className="overflow-hidden rounded-[var(--site-radius-lg)]" direction={flip ? "right" : "left"}>
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <Parallax className="absolute -inset-y-[10%] inset-x-0" speed={0.8}>
-                        <SiteImage image={item.image} className="size-full" />
+                        <SiteImage image={item.image} className="size-full" sizes="(min-width: 768px) 60vw, 100vw" />
                       </Parallax>
                     </div>
                   </ImageReveal>

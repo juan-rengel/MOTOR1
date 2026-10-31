@@ -28,7 +28,7 @@ export function CtaSection({ section }: { section: SectionOf<"cta"> }) {
           {withImage && (
             <div className="absolute inset-0 -z-10" aria-hidden>
               <Parallax className="absolute -inset-y-[15%] inset-x-0">
-                <SiteImage image={{ ...p.image, alt: "" }} className="size-full" />
+                <SiteImage image={{ ...p.image, alt: "" }} className="size-full" sizes="(min-width: 1280px) 1240px, 100vw" />
               </Parallax>
               <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/80" />
             </div>

@@ -75,6 +75,16 @@ function Lightbox({ items, index, onClose, onIndex }: { items: GalleryItem[]; in
 }
 
 const MOSAIC_SPANS = ["md:col-span-4 md:row-span-2", "md:col-span-2", "md:col-span-2", "md:col-span-3", "md:col-span-3"];
+/** Fração da largura (em sextos, a partir de md) ocupada por cada posição do mosaico — acompanha MOSAIC_SPANS. */
+const MOSAIC_SIXTHS = [4, 2, 2, 3, 3];
+
+/** Largura ocupada por cada imagem da galeria, para o navegador escolher o tamanho certo. */
+function gallerySizes(layout: SectionOf<"gallery">["props"]["layout"], index: number): string {
+  if (layout === "strip") return "(min-width: 640px) 420px, 78vw";
+  if (layout === "grid") return "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
+  const sixths = MOSAIC_SIXTHS[index % MOSAIC_SIXTHS.length] ?? 6;
+  return `(min-width: 768px) ${Math.round((sixths / 6) * 100)}vw, (min-width: 640px) 50vw, 100vw`;
+}
 
 export function GallerySection({ section }: { section: SectionOf<"gallery"> }) {
   const p = section.props;
@@ -114,7 +124,12 @@ export function GallerySection({ section }: { section: SectionOf<"gallery"> }) {
                   aria-label={`Ampliar imagem: ${item.image.alt || item.caption || `imagem ${i + 1}`}`}
                 >
                   <ImageReveal className="size-full" direction={i % 2 ? "left" : "up"}>
-                    <SiteImage image={item.image} className="size-full" imgClassName="transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105" />
+                    <SiteImage
+                      image={item.image}
+                      className="size-full"
+                      imgClassName="transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+                      sizes={gallerySizes(p.layout, i)}
+                    />
                   </ImageReveal>
                   {item.caption && (
                     <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-5 pt-12 text-sm font-medium text-white">
