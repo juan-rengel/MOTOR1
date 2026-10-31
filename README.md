@@ -15,7 +15,7 @@ Esta é a **primeira versão funcional**: roda localmente, sem contas externas e
 | Página inicial da plataforma | ✅ |
 | Painel de projetos (listar, abrir, visualizar, excluir com confirmação) | ✅ |
 | Assistente "Criar novo site" (negócio → estilo → modelo → revisão) | ✅ |
-| 12 segmentos configurados; 3 modelos dedicados (oficina mecânica, ótica, roupas/tênis) e o modelo universal **Essencial** para os demais segmentos | ✅ |
+| 14 segmentos configurados — no assistente, primeiro os prioritários: Oficina mecânica, Barbearia, Beleza, Loja de roupas, Loja de calçados e Loja de variedades; 3 modelos dedicados (oficina mecânica, ótica, roupas/calçados) e o modelo universal **Essencial** para os demais segmentos | ✅ |
 | 8 estilos visuais (cinematográfico, luxuoso, moderno, minimalista, industrial, tecnológico, elegante, vibrante) | ✅ |
 | Editor visual: seções (selecionar, reordenar, adicionar, duplicar, ocultar, remover com confirmação), textos, imagens, botões, links, cores, tipografia, logotipo | ✅ |
 | Desfazer/refazer, salvar (Ctrl+S), aviso de alterações não salvas, detecção de edição concorrente | ✅ |
@@ -186,14 +186,16 @@ Detalhes técnicos em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 - **Imagens enviadas (uploads) não são otimizadas**: chegam ao visitante no tamanho original. Só as imagens de demonstração passam pelo otimizador; a otimização segura dos uploads fica para a FASE 9 (ver [`docs/SEGURANCA.md`](docs/SEGURANCA.md)).
 - **Otimizador de imagens no Windows**: usa o `sharp` que já vem com o Next.js (a versão para Windows está no `package-lock.json`), então não deve exigir instalação extra — **ainda não verificado em uma máquina Windows**. A primeira visualização de cada imagem é um pouco mais lenta enquanto ela é otimizada; depois fica em cache em `.next/cache/images`.
 - **Desempenho medido apenas em navegador sem GPU** (ambiente de testes). Em aparelhos reais a cena 3D usa a placa de vídeo; a qualidade se ajusta automaticamente, mas não há medição de Lighthouse registrada.
-- Sem modelos dedicados (ainda) para advocacia, odontologia, móveis, academia, barbearia, restaurante, serviços e outros negócios — esses segmentos usam o modelo universal **Essencial** (textos do próprio segmento, sem imagens nem cena 3D). Modelos dedicados só podem ser usados no segmento para o qual foram desenhados.
+- Sem modelos dedicados (ainda) para barbearia, beleza, loja de variedades, advocacia, odontologia, móveis, academia, restaurante, serviços e outros negócios — esses segmentos usam o modelo universal **Essencial** (textos do próprio segmento, sem imagens nem cena 3D). Modelos dedicados só podem ser usados no segmento para o qual foram desenhados.
+- **Gestão de serviços pelo proprietário** (adicionar, editar, ativar/desativar e remover serviços, sem deixar cartões vazios ou espaços no site) ainda não existe — requisito registrado para uma etapa futura (ver [`docs/STATUS.md`](docs/STATUS.md)).
 
 ## Próximas etapas
 
 1. **FASE 8 — IA**: escolher provedor, definir custos/limites e implementar `ContentGenerator` no servidor (ver [`docs/INTEGRACOES.md`](docs/INTEGRACOES.md)).
 2. **FASE 9 — Firebase**: autenticação real, driver de projetos no Firestore e uploads no Storage, com regras de acesso por usuário.
 3. **FASE 10 — Publicação**: hospedagem dos sites gerados, domínios e medição de desempenho (a otimização das imagens de demonstração já existe; a das imagens enviadas depende da FASE 9).
-4. Novos modelos por segmento (advocacia, odontologia, móveis — a cena de GLB já atende móveis —, academia).
+4. Modelos dedicados por segmento, na ordem de prioridade: Oficina mecânica (realista), Barbearia, Beleza, Loja de roupas, Loja de calçados e Loja de variedades; depois os demais segmentos.
+5. Gestão de serviços pelo proprietário (requisito futuro registrado em [`docs/STATUS.md`](docs/STATUS.md)).
 
 ## Futuras integrações
 

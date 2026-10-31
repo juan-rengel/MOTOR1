@@ -24,8 +24,9 @@
 |---|---|---|
 | 0 — Instruções e skills do Claude Code | ✅ Concluída (30/10/2026) | `CLAUDE.md` (regras permanentes), `.claude/settings.json` (permissões: verificação liberada; instalação, `npx`, commit, push e geração de mídia sob confirmação; segredos `.env`, recursos de demonstração existentes, publicação e comandos destrutivos bloqueados) e skills `novo-modelo-segmento`, `revisao-visual`, `verificar`, `recursos-demo`. Auditoria final com 10 correções aplicadas. `.gitignore` passa a ignorar `.claude/settings.local.json`. Nenhum componente, página, modelo, teste ou recurso alterado. |
 | 1A — Fim do conteúdo de outro segmento | ✅ Concluída (30/10/2026, commit `f1ac997`) | Modelo universal **Essencial** (`universal-essential`: sem imagens e sem cena 3D, textos do segmento escolhido). O assistente oferece só os modelos dedicados ao segmento e o Essencial; o servidor recusa modelo dedicado em outro segmento (422). Pacotes de texto novos para barbearia/salão, restaurante, móveis e serviços. Os 3 modelos antigos geram exatamente o mesmo conteúdo (referência fixa) e as demonstrações ficaram idênticas pixel a pixel. Projetos antigos continuam abrindo. |
-| 1B — Imagens e proteção contra regressões | ✅ Passos 1 a 3 concluídos (commits `b4c6452`, `4b2a5aa`, `9f490ec`); passo 4 (documentação e comparação WebP × AVIF) aguardando revisão | **Proteção:** hashes de 82 arquivos protegidos, referência fixa do Essencial (96 combinações), regressão visual dos 4 modelos em 390/834/1440 px (8,02 MB de referências; imagens mascaradas na própria camada nos modelos antigos, Essencial sem máscara; granulação oculta só na captura e verificada à parte; tolerância de 1% de cor, zero pixels acima). **ESLint** ignora `playwright-report/` e `test-results/`. **Imagens:** otimizador nativo do Next só para `/assets/demo` (WebP, qualidade 75), `sizes` por seção, capa com `fetchpriority="high"`; uploads e URLs externas sem otimização (uploads reavaliados na Fase 9 — ver SEGURANCA.md). **Orçamento de bytes** por demonstração. Modelos protegidos idênticos (referências visuais e fixas). |
-| 1C — Segmentos na ordem oficial | ⏸ Aguardando plano | Decisão D1: separar Barbearia e Beleza, ampliar Loja de tênis para Loja de calçados, criar Loja de variedades (com migração). |
+| 1B — Imagens e proteção contra regressões | ✅ Concluída (31/10/2026, commits `b4c6452`, `4b2a5aa`, `9f490ec`, `fddcd97`) | **Proteção:** hashes de 82 arquivos protegidos, referência fixa do Essencial (96 combinações; ampliada para 112 na Etapa 1C.1), regressão visual dos 4 modelos em 390/834/1440 px (8,02 MB de referências; imagens mascaradas na própria camada nos modelos antigos, Essencial sem máscara; granulação oculta só na captura e verificada à parte; tolerância de 1% de cor, zero pixels acima). **ESLint** ignora `playwright-report/` e `test-results/`. **Imagens:** otimizador nativo do Next só para `/assets/demo` (WebP, qualidade 75), `sizes` por seção, capa com `fetchpriority="high"`; uploads e URLs externas sem otimização (uploads reavaliados na Fase 9 — ver SEGURANCA.md). **Orçamento de bytes** por demonstração. Modelos protegidos idênticos (referências visuais e fixas). |
+| 1C.1 — Segmentos na ordem oficial | ✅ Implementada (31/10/2026), aguardando aprovação final e commit | **14 segmentos.** Novos: **Barbearia** (`barbershop`) e **Loja de variedades** (`variety`), acrescentados no fim da lista de ids. **Beleza** (`beauty`, antes "Barbearia e salão") passa a tratar de unhas, cílios, sobrancelhas e cabelo; **Loja de calçados** (`sneakers`, antes "Loja de tênis") ganha descrição e sugestões de calçados — ids mantidos, sem migração. Assistente com os seis segmentos prioritários primeiro (Mecânica, Barbearia, Beleza, Roupas, Calçados, Variedades). Textos novos de Barbearia e Variedades; textos de Beleza reescritos; pacote `sneakers` byte a byte inalterado (usado pela Coleção Editorial). Os novos segmentos usam o Essencial até terem modelo dedicado. Referência do Essencial: 112 combinações. Modelos protegidos intactos. |
+| 1C (demais) — Seções e modelos por segmento | ⏸ Aguardando plano | Conforme o planejamento aprovado da 1C: seções novas e modelos dedicados intercalados por segmento, na ordem oficial, começando pela Mecânica. |
 | 2 a 8 | ⏸ Aguardando aprovação | Cada etapa começa com plano apresentado e aprovação explícita. Dados estruturados `LocalBusiness` (JSON-LD) ficam para a Etapa 6 (decisão D2). |
 
 ## Arquitetura atual
@@ -40,7 +41,7 @@ Resumo em [`ARQUITETURA.md`](ARQUITETURA.md). Pontos centrais:
 ## Funcionalidades existentes
 
 - Criação de projeto (dados do negócio com validação de telefone/e-mail/redes, estilo visual, modelo recomendado por segmento, revisão).
-- 3 modelos dedicados + o modelo universal Essencial, 8 estilos, 12 segmentos configurados. Modelos dedicados só são oferecidos (e aceitos pelo servidor) no próprio segmento.
+- 3 modelos dedicados + o modelo universal Essencial, 8 estilos, 14 segmentos configurados — no assistente, os seis prioritários primeiro: Oficina mecânica, Barbearia, Beleza, Loja de roupas, Loja de calçados e Loja de variedades. Modelos dedicados só são oferecidos (e aceitos pelo servidor) no próprio segmento.
 - Imagens de demonstração otimizadas pelo Next (tamanhos sob medida, WebP qualidade 75), capa com prioridade alta de carregamento; uploads e URLs externas entregues sem otimização.
 - Editor: reordenar/adicionar/duplicar/ocultar/remover seções (remoção com confirmação), campos gerados por definição, seletor de mídia (biblioteca, upload, URL https), botões com ação (WhatsApp, seção, link, telefone, e-mail) e alerta quando o destino falta, cores com contraste calculado, fontes, cantos, logotipo, movimento, cena 3D (cena, variação, câmera, qualidade, ambiente, cores, imagem substituta, GLB), SEO, slug, domínio desejado, exportação JSON.
 - Verificações de qualidade (conteúdo demonstrativo, botões sem destino, imagens sem texto alternativo, contraste, GLB ausente, SEO).
@@ -48,15 +49,26 @@ Resumo em [`ARQUITETURA.md`](ARQUITETURA.md). Pontos centrais:
 - Biblioteca de recursos com upload validado por assinatura, licença e texto alternativo.
 - Cenas 3D: carro, óculos (quadrado, redondo, gatinho, aviador), tênis, tecido, GLB próprio. Imagens de demonstração geradas a partir delas.
 
-## Testes realizados (última execução: 31/10/2026, Etapa 1B — passo 4)
+## Testes realizados (última execução: 31/10/2026, Etapa 1C.1 — passo 5)
 
 | Verificação | Comando | Resultado |
 |---|---|---|
 | Tipos | `npm run typecheck` | ✅ sem erros |
 | Lint | `npm run lint` | ✅ 0 problemas (antes e depois da suíte ponta a ponta) |
-| Unitários/integração | `npm run test` | ✅ 289 testes, 10 arquivos (inclui integridade de 82 arquivos protegidos e referências fixas dos modelos e do Essencial) |
+| Unitários/integração | `npm run test` | ✅ 340 testes, 11 arquivos (inclui integridade de 82 arquivos protegidos, referência fixa dos modelos antigos — 36 combinações —, referência do Essencial — 112 combinações — e 24 testes de segmentos) |
 | Build de produção | `npm run build` | ✅ sem avisos |
-| Ponta a ponta | `npm run test:e2e:full` (build + testes) | ✅ 74 testes (inclui 12 capturas de regressão visual, 8 verificações da granulação, 4 de imagens e 4 de orçamento de bytes) |
+| Ponta a ponta | `npm run test:e2e` | ✅ 77 testes (inclui 12 capturas de regressão visual, 8 verificações da granulação, 4 de imagens, 4 de orçamento de bytes e 3 do assistente com os segmentos novos) |
+
+### Etapa 1C.1 — comparação da referência do Essencial
+
+Projetos completos gerados antes (`fddcd97`) e depois, comparados campo a campo:
+
+- **80 entradas idênticas** (10 segmentos × 8 estilos: mecânica, advocacia, odontologia, ótica, roupas, móveis, academia, restaurante, serviços e outro).
+- **16 alteradas** só em campos de texto autorizados: Beleza (título pequeno, título e subtítulo da capa; serviços — que passam de 5 para 4: Unhas, Cílios, Sobrancelhas, Cabelo; texto "Sobre"; descrição de SEO) e Loja de calçados (título pequeno da capa; serviços Tênis, Sapatos sociais, Sandálias, Botas, Infantil).
+- **16 novas** (Barbearia e Loja de variedades × 8 estilos), com a mesma estrutura do Essencial nos demais segmentos.
+- Tema, movimento, cena 3D, publicação, ordem/tipos/âncoras das seções e demais propriedades: idênticos. Total: **112**.
+- Arquivo de hashes: só 3 entradas atualizadas (`src/domain/business.ts`, `copy-packs.ts`, referência do Essencial); as outras 79 e as pastas fechadas idênticas.
+- Referência fixa dos modelos antigos e as 12 referências visuais: inalteradas.
 
 ### Bytes por demonstração antes e depois da Etapa 1B
 
@@ -105,11 +117,17 @@ Ambiente de teste sem GPU: as cenas 3D rodam em software (SwiftShader). Por isso
 - Modelos antigos em 834 px e 390 px: o objeto 3D (carro, óculos) sobrepõe parte do título da capa; em 834 px sem WebGL a imagem substituta da ótica aparece cortada na lateral. Já existia antes da Etapa 1A (renderização idêntica).
 - Essencial: o cartão na página inicial fica sozinho na segunda linha e sem selo de segmento (`src/app/page.tsx` fora do escopo da 1A); a imagem de prévia mostra o texto da demonstração ("Prestador de serviços") também quando o segmento escolhido é outro; serviços com 4 itens deixam um cartão isolado na grade; a descrição dos serviços repete o nome do serviço ("Orçamento: … solicite um orçamento"); a seção "Sobre" sem foto fica com bastante espaço vazio.
 - Loja de móveis deixou de poder usar a cena 3D da Garagem (modelo de outro segmento). A cena de modelo GLB próprio continua existindo; um modelo dedicado de móveis é previsto para a Etapa 4.
+- Projetos criados antes da Etapa 1C.1 com o segmento `beauty` aparecem como "Beleza", mesmo os que eram barbearias; o editor ainda não permite trocar o segmento de um projeto existente (o conteúdo gravado não muda).
+- No Essencial, a Loja de calçados ainda usa os textos voltados a tênis do pacote `sneakers`, mantido intacto porque a Coleção Editorial depende dele. Textos próprios de calçados virão com o modelo dedicado do segmento.
+
+## Requisitos futuros registrados
+
+- **Gestão de serviços pelo proprietário:** O proprietário do negócio deverá poder **adicionar** serviços, **editar** os existentes, **ativar e desativar** cada serviço e **removê-los**, conforme as regras que o sistema definir. Regra visual e funcional: serviços desativados ou sem conteúdo **não podem gerar cartões vazios, espaços sobrando nem seções sem conteúdo** no site. Não implementado — pertence a uma etapa futura (seção de serviços nova / painel do cliente), com plano próprio.
 
 ## Próxima tarefa concreta
 
-1. Revisão do passo 4 da Etapa 1B (documentação e comparação WebP × AVIF) e autorização de commit.
-2. Plano da **Etapa 1C** (segmentos na ordem oficial: Mecânica, Barbearia, Beleza, Roupas, Calçados, Variedades), com migração dos projetos existentes.
-3. Depois: Etapa 2 (design system), conforme o plano de evolução.
+1. Aprovação final da **Etapa 1C.1** e autorização de commit.
+2. Plano das próximas etapas da 1C, na ordem oficial e intercalando seções e modelos por segmento: primeiro a **Mecânica** (seções de serviços, horário e localização, capa fotográfica, pedido de orçamento; depois o modelo dedicado).
+3. Decisões pendentes antes do modelo de Mecânica: fonte das fotografias realistas e veículo sem marca (D2, D3).
 
 Continuam dependendo de decisões do responsável: FASE 8 (provedor de IA, custos) e FASE 9 (projeto Firebase).

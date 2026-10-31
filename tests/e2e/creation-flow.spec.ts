@@ -160,6 +160,43 @@ test.describe("fluxo de criação e edição", () => {
     await expect(page.getByRole("radiogroup", { name: "Modelo inicial" })).not.toContainText("Garagem");
   });
 
+  test("assistente mostra os seis segmentos prioritários primeiro, na ordem oficial", async ({ page }) => {
+    await page.goto("/studio/new");
+    const radios = page.getByRole("radiogroup", { name: "Segmento" }).getByRole("radio");
+    await expect(radios).toHaveCount(14);
+    const labels = await radios.evaluateAll((els) => els.slice(0, 6).map((el) => el.querySelector("span span")?.textContent ?? ""));
+    expect(labels).toEqual(["Oficina mecânica", "Barbearia", "Beleza", "Loja de roupas", "Loja de calçados", "Loja de variedades"]);
+    await expect(radios.first()).toHaveAttribute("aria-checked", "true");
+  });
+
+  for (const { radio, name, label, title } of [
+    { radio: /^Barbearia/, name: "Barbearia Teste", label: "Barbearia", title: "Corte na medida do seu estilo." },
+    { radio: /^Loja de variedades/, name: "Variedades Teste", label: "Loja de variedades", title: "Tudo o que você procura em um só lugar." },
+  ]) {
+    test(`${label}: cria o site com o Essencial e os textos do segmento`, async ({ page }) => {
+      const errors = trackErrors(page);
+      await page.goto("/studio/new");
+      await page.getByRole("radio", { name: radio }).click();
+      await page.getByLabel("Nome comercial").fill(name);
+      await page.getByRole("button", { name: "Continuar" }).click();
+      await page.getByRole("button", { name: "Continuar" }).click();
+      const choices = page.getByRole("radiogroup", { name: "Modelo inicial" }).getByRole("radio");
+      await expect(choices).toHaveCount(1);
+      await expect(choices.first()).toContainText("Essencial");
+      await page.getByRole("button", { name: "Continuar" }).click();
+      await page.getByRole("button", { name: "Criar site" }).click();
+      await page.waitForURL(/\/studio\/projects\/[0-9a-f-]{36}$/, { timeout: 30_000 });
+
+      const site = preview(page).locator(".site-root");
+      await expect(site).toContainText(title, { timeout: 30_000 });
+      await expect(site).toContainText(label);
+      const text = (await site.innerText()).toLowerCase();
+      for (const term of ["oficina", "carro", "armaç", "ótica", "coleção", "tênis"]) expect(text).not.toContain(term);
+      await expect(preview(page).locator('[data-section-type="sceneStory"]')).toHaveCount(0);
+      expect(errors).toEqual([]);
+    });
+  }
+
   test("valida campos obrigatórios e telefone no assistente", async ({ page }) => {
     await page.goto("/studio/new");
     await page.getByLabel("WhatsApp").fill("123");

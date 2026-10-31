@@ -99,13 +99,27 @@ const PACKS: Partial<Record<SegmentId, CopyPack>> = {
     whatsappMessage: (b) => `Olá, ${b.name}! Quero saber sobre planos e horários.`,
   },
   beauty: {
-    heroTitles: ["Seu estilo, do seu jeito.", "Cuidado e estilo em cada atendimento.", "Reserve seu horário com tranquilidade."],
+    heroTitles: [
+      "Unhas, cílios, sobrancelhas e cabelo com cuidado.",
+      "Cuidado para unhas, cílios, sobrancelhas e cabelo.",
+      "Agende unhas, cílios, sobrancelhas ou cabelo.",
+    ],
     heroSubtitle: (b) =>
-      b.description || `Barbearia e salão${where(b)}. Conheça os serviços e agende seu horário pelo WhatsApp.`,
+      b.description || `Beleza${where(b)}: unhas, cílios, sobrancelhas e cabelo. Agende seu horário pelo WhatsApp.`,
     offeringDescription: (o) => `${o}: consulte disponibilidade e agende seu horário.`,
     aboutText: (b) =>
       b.description ||
-      `${b.name} atende${where(b)} com hora marcada. Edite este texto com a história real do espaço e da equipe.`,
+      `${b.name} cuida de unhas, cílios, sobrancelhas e cabelo${where(b)}, com hora marcada. Edite este texto com a história real do espaço e da equipe.`,
+    whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de agendar um horário.`,
+  },
+  barbershop: {
+    heroTitles: ["Corte na medida do seu estilo.", "Tradição e precisão em cada detalhe.", "Seu horário, sua cadeira."],
+    heroSubtitle: (b) =>
+      b.description || `Barbearia${where(b)}. Conheça os cortes e agende seu horário pelo WhatsApp.`,
+    offeringDescription: (o) => `${o}: consulte horários e agende pelo WhatsApp.`,
+    aboutText: (b) =>
+      b.description ||
+      `${b.name} atende${where(b)} com hora marcada. Edite este texto com a história real da barbearia e da equipe.`,
     whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de agendar um horário.`,
   },
   restaurant: {
@@ -137,6 +151,16 @@ const PACKS: Partial<Record<SegmentId, CopyPack>> = {
       b.description ||
       `${b.name} atende${where(b)} com combinação clara do que será feito. Edite este texto com a história real do seu trabalho.`,
     whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de solicitar um orçamento.`,
+  },
+  variety: {
+    heroTitles: ["Tudo o que você procura em um só lugar.", "Variedade para o seu dia a dia.", "Presentes e utilidades para todos os momentos."],
+    heroSubtitle: (b) =>
+      b.description || `Loja de variedades${where(b)}. Veja os produtos e consulte a disponibilidade pelo WhatsApp.`,
+    offeringDescription: (o) => `${o}: consulte modelos e disponibilidade.`,
+    aboutText: (b) =>
+      b.description ||
+      `${b.name} reúne produtos para o dia a dia e para presentear${where(b)}. Edite este texto com a história real da loja.`,
+    whatsappMessage: (b) => `Olá, ${b.name}! Gostaria de saber mais sobre os produtos.`,
   },
 };
 

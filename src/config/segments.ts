@@ -15,6 +15,11 @@ export interface SegmentDefinition {
   offeringIcon: SiteIconId;
 }
 
+/**
+ * Ordem de exibição (assistente, página de modelos): primeiro os seis segmentos
+ * prioritários do MOTOR1, na ordem oficial — Mecânica, Barbearia, Beleza, Roupas,
+ * Calçados, Variedades —, depois os demais.
+ */
 export const SEGMENTS: readonly SegmentDefinition[] = [
   {
     id: "mechanic",
@@ -25,6 +30,56 @@ export const SEGMENTS: readonly SegmentDefinition[] = [
     defaultGoal: "quote",
     suggestedStyles: ["cinematic", "industrial", "tech"],
     offeringIcon: "wrench",
+  },
+  {
+    id: "barbershop",
+    label: "Barbearia",
+    description: "Cortes, barba e cuidados masculinos.",
+    icon: "scissors",
+    offeringHints: ["Corte degradê", "Corte clássico", "Barba", "Sobrancelha", "Pigmentação"],
+    defaultGoal: "booking",
+    suggestedStyles: ["luxury", "cinematic", "industrial"],
+    offeringIcon: "scissors",
+  },
+  {
+    id: "beauty",
+    label: "Beleza",
+    description: "Unhas, cílios, sobrancelhas e cabelo.",
+    icon: "sparkles",
+    offeringHints: ["Unhas", "Cílios", "Sobrancelhas", "Cabelo"],
+    defaultGoal: "booking",
+    suggestedStyles: ["elegant", "minimal", "luxury"],
+    offeringIcon: "sparkles",
+  },
+  {
+    id: "fashion",
+    label: "Loja de roupas",
+    description: "Moda feminina, masculina, infantil e acessórios.",
+    icon: "shirt",
+    offeringHints: ["Nova coleção", "Vestidos", "Jeans", "Alfaiataria", "Acessórios"],
+    defaultGoal: "catalog",
+    suggestedStyles: ["vibrant", "modern", "luxury"],
+    offeringIcon: "shirt",
+  },
+  {
+    id: "sneakers",
+    label: "Loja de calçados",
+    description: "Tênis, sapatos, sandálias e calçados infantis.",
+    icon: "footprints",
+    offeringHints: ["Tênis", "Sapatos sociais", "Sandálias", "Botas", "Infantil"],
+    defaultGoal: "catalog",
+    suggestedStyles: ["vibrant", "tech", "cinematic"],
+    offeringIcon: "footprints",
+  },
+  {
+    id: "variety",
+    label: "Loja de variedades",
+    description: "Relógios, garrafas térmicas, utilidades e presentes.",
+    icon: "package",
+    offeringHints: ["Relógios", "Garrafas térmicas", "Utilidades", "Presentes", "Acessórios"],
+    defaultGoal: "catalog",
+    suggestedStyles: ["vibrant", "modern", "minimal"],
+    offeringIcon: "package",
   },
   {
     id: "law",
@@ -57,26 +112,6 @@ export const SEGMENTS: readonly SegmentDefinition[] = [
     offeringIcon: "glasses",
   },
   {
-    id: "fashion",
-    label: "Loja de roupas",
-    description: "Moda feminina, masculina, infantil e acessórios.",
-    icon: "shirt",
-    offeringHints: ["Nova coleção", "Vestidos", "Jeans", "Alfaiataria", "Acessórios"],
-    defaultGoal: "catalog",
-    suggestedStyles: ["vibrant", "modern", "luxury"],
-    offeringIcon: "shirt",
-  },
-  {
-    id: "sneakers",
-    label: "Loja de tênis",
-    description: "Tênis, streetwear e artigos esportivos.",
-    icon: "footprints",
-    offeringHints: ["Lançamentos", "Corrida", "Casual", "Basquete", "Infantil"],
-    defaultGoal: "catalog",
-    suggestedStyles: ["vibrant", "tech", "cinematic"],
-    offeringIcon: "footprints",
-  },
-  {
     id: "furniture",
     label: "Loja de móveis",
     description: "Móveis, decoração e projetos de ambientes.",
@@ -95,16 +130,6 @@ export const SEGMENTS: readonly SegmentDefinition[] = [
     defaultGoal: "booking",
     suggestedStyles: ["vibrant", "industrial", "cinematic"],
     offeringIcon: "dumbbell",
-  },
-  {
-    id: "beauty",
-    label: "Barbearia e salão",
-    description: "Barbearias, salões de beleza e estética.",
-    icon: "scissors",
-    offeringHints: ["Corte", "Barba", "Coloração", "Tratamentos", "Manicure"],
-    defaultGoal: "booking",
-    suggestedStyles: ["luxury", "industrial", "elegant"],
-    offeringIcon: "scissors",
   },
   {
     id: "restaurant",

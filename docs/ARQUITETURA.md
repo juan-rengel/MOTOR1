@@ -73,6 +73,26 @@ Separação conceitual para a evolução SaaS: plataforma (Studio) · proprietá
 
 Para criar um tipo novo: schema em `domain/sections.ts` → padrão em `features/sections/create-section.ts` → componente em `features/site-renderer/sections/` + registro em `section-registry.tsx` → campos em `features/editor/section-fields.ts`.
 
+**Requisito futuro (não implementado) — gestão de serviços:** O proprietário do negócio deverá poder **adicionar** serviços, **editar** os existentes, **ativar e desativar** cada serviço e **removê-los**, conforme as regras que o sistema definir. Regra visual e funcional: serviços desativados ou sem conteúdo **não podem gerar cartões vazios, espaços sobrando nem seções sem conteúdo** no site. Não implementado — pertence a uma etapa futura (seção de serviços nova / painel do cliente), com plano próprio. Hoje os itens de serviço não têm campo de ativação; quando for implementado, o campo deve ser um acréscimo opcional no schema (sem valor padrão gravado, para não alterar o conteúdo gerado pelos modelos protegidos) e a grade deve se ajustar ao número de itens visíveis.
+
+## Segmentos (Etapa 1C.1)
+
+- **Ids** em `src/domain/business.ts` (`SEGMENT_IDS`), gravados em cada projeto (`business.segment`). A lista só cresce **no fim**: ids existentes nunca mudam de posição nem são removidos, por isso projetos antigos continuam válidos sem migração.
+- **Configuração** em `src/config/segments.ts`: nome, descrição, ícone, sugestões de serviços/produtos, objetivo e estilos sugeridos. A **ordem da lista `SEGMENTS`** é a ordem de exibição no assistente e na página de modelos: primeiro os seis prioritários.
+- **Textos** por segmento em `src/features/content/copy-packs.ts` (segmentos sem pacote usam o genérico).
+
+| Ordem | Segmento | Id | Modelo atual |
+|---|---|---|---|
+| 1 | Oficina mecânica | `mechanic` | Garagem Cinematográfica (dedicado) + Essencial |
+| 2 | Barbearia | `barbershop` | Essencial |
+| 3 | Beleza (unhas, cílios, sobrancelhas, cabelo) | `beauty` | Essencial |
+| 4 | Loja de roupas | `fashion` | Coleção Editorial (dedicado) + Essencial |
+| 5 | Loja de calçados | `sneakers` | Coleção Editorial (dedicado) + Essencial |
+| 6 | Loja de variedades | `variety` | Essencial |
+| 7–14 | Advocacia, Clínica odontológica, Ótica, Loja de móveis, Academia, Restaurante, Prestador de serviços, Outro | `law`, `dental`, `optics`, `furniture`, `gym`, `restaurant`, `services`, `other` | Ótica Atelier (dedicado) para ótica; Essencial nos demais |
+
+`beauty` (antes "Barbearia e salão") e `sneakers` (antes "Loja de tênis") mantiveram o id; mudaram nome, descrição e sugestões. O pacote de textos `sneakers` não foi alterado porque a Coleção Editorial depende dele.
+
 ## Modelos
 
 `src/features/templates/*.ts` implementam `TemplateDefinition`: segmentos, estilo padrão, ajustes de tema por estilo, cena 3D, seções iniciais (usando os dados do negócio quando informados) e um negócio fictício para a demonstração. Registro em `registry.ts`.
@@ -88,7 +108,7 @@ Projetos criados antes dessa regra continuam abrindo e editando normalmente: a v
 |---|---|---|---|
 | Garagem Cinematográfica | Oficina mecânica | Carro | História 3D, faixa, serviços, processo, estrutura, sobre, dúvidas, orçamento, contato |
 | Ótica Atelier | Ótica | Óculos (4 formatos) | História 3D, catálogo de armações, editorial de atendimento, passo a passo, sobre, dúvidas, chamada, contato |
-| Coleção Editorial | Roupas e tênis | Tecido (roupas) ou tênis | História 3D, faixa, catálogo com pedido, lookbook, galeria, como comprar, dúvidas, chamada, contato |
+| Coleção Editorial | Loja de roupas e Loja de calçados | Tecido (roupas) ou tênis | História 3D, faixa, catálogo com pedido, lookbook, galeria, como comprar, dúvidas, chamada, contato |
 | Essencial (universal) | Todos (recomendado para os segmentos sem modelo dedicado) | Nenhuma | Capa em degradê, serviços, como funciona, sobre, dúvidas, chamada, contato |
 
 ## Imagens (Etapa 1B)
@@ -123,7 +143,8 @@ Fora do escopo: logotipo do cabeçalho, imagem ampliada da galeria e imagens do 
 | Teste | O que garante |
 |---|---|
 | `tests/unit/protected-files.test.ts` + `tests/fixtures/protected-files.sha256.json` | 82 arquivos protegidos (modelos, recursos de demonstração, cenas 3D, domínio, scripts, dependências, regras) com hash fixo; pastas protegidas sem arquivos novos. Texto comparado com quebras de linha normalizadas (funciona no Windows). |
-| Referências fixas (`src/features/templates/__snapshots__/`) | O que os 3 modelos dedicados (36 combinações) e o Essencial (96 combinações) geram não muda. |
+| Referências fixas (`src/features/templates/__snapshots__/`) | O que os 3 modelos dedicados (36 combinações) e o Essencial (112 combinações: 14 segmentos × 8 estilos) geram não muda. |
+| `tests/unit/segments.test.ts` | 14 segmentos (12 antigos na mesma posição, novos no fim), ordem de exibição, configurações válidas, modelos oferecidos aos segmentos novos e compatibilidade de projetos gravados antes da Etapa 1C.1. |
 | `tests/e2e/visual.spec.ts` | Capturas de página inteira dos 4 modelos em 390, 834 e 1440 px (movimento reduzido, sem WebGL), comparadas com `visual.spec.ts-snapshots/` (8,02 MB): zero pixels acima de 1% de diferença de cor. Nos 3 modelos antigos, o conteúdo das imagens é mascarado na própria camada (`visual-mask.css`) — tamanho, posição e tudo o que fica por cima continuam comparados; o Essencial é comparado sem máscara. A granulação de filme é ocultada só na captura (`visual-no-grain.css`) e verificada à parte. Roda só no Linux (no Windows é pulado com aviso). |
 | `tests/e2e/images.spec.ts` | Capa com prioridade alta, `srcset` e WebP; imagens fora da capa sob demanda; versão menor no celular; uploads e URLs externas fora do otimizador; substituto quando a imagem falha; arquivo enviado idêntico e exclusão funcionando. |
 | `tests/e2e/budget.spec.ts` | Orçamento de bytes por demonstração (celular 390 px a 3×, sem WebGL, página inteira). |

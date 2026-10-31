@@ -148,12 +148,40 @@ describe("compatibilidade entre modelo e segmento", () => {
 });
 
 describe("pacotes de texto novos", () => {
-  it.each(["beauty", "restaurant", "furniture", "services"] as const)("%s tem pacote próprio, sem números nem contatos", (segment) => {
+  it.each(["beauty", "restaurant", "furniture", "services", "barbershop", "variety"] as const)("%s tem pacote próprio, sem números nem contatos", (segment) => {
     const pack = getCopyPack(segment);
     expect(pack).not.toBe(getCopyPack("other"));
     const b = business(segment);
     const text = [...pack.heroTitles, pack.heroSubtitle(b), pack.offeringDescription("Item", b), pack.aboutText(b), pack.whatsappMessage(b)].join(" ").toLowerCase();
     expect(text).not.toMatch(/\d|r\$|melhor|nº ?1|premiad|certificad|@|https?:/);
+  });
+
+  const packText = (segment: SegmentId) => {
+    const pack = getCopyPack(segment);
+    const b = business(segment, { city: "Campinas" });
+    return [...pack.heroTitles, pack.heroSubtitle(b), pack.offeringDescription("Item", b), pack.aboutText(b), pack.whatsappMessage(b)].join(" | ").toLowerCase();
+  };
+
+  it("Beleza trata só de unhas, cílios, sobrancelhas e cabelo — sem barbearia nem barba", () => {
+    const text = packText("beauty");
+    expect(text).not.toMatch(/barb/);
+    for (const word of ["unhas", "cílios", "sobrancelhas", "cabelo"]) expect(text).toContain(word);
+  });
+
+  it.each(["barbershop", "variety"] as const)("%s não usa termos de outros segmentos", (segment) => {
+    const text = packText(segment);
+    for (const term of ["oficina", "carro", "veículo", "motor", "ótica", "armaç", "lentes", "coleção", "tênis", "numeração", "lookbook"]) {
+      expect(text, `"${term}" em ${segment}`).not.toContain(term);
+    }
+  });
+
+  it.each(["barbershop", "variety", "beauty"] as const)("%s mostra a cidade quando informada", (segment) => {
+    expect(packText(segment)).toContain("em campinas");
+  });
+
+  it("Calçados (sneakers) mantém o pacote da Coleção Editorial", () => {
+    // O pacote de "sneakers" é usado pelo modelo protegido Coleção Editorial e não pode mudar.
+    expect(getCopyPack("sneakers").heroTitles[0]).toBe("Cada passo, um statement.");
   });
 });
 
@@ -168,7 +196,7 @@ describe("referência fixa do Essential", () => {
   };
   const FIXED = { ownerId: "local", now: new Date("2026-01-01T00:00:00.000Z"), id: "00000000-0000-4000-8000-000000000000" };
 
-  it("gera exatamente o mesmo conteúdo da referência gravada (12 segmentos × 8 estilos)", async () => {
+  it("gera exatamente o mesmo conteúdo da referência gravada (todos os segmentos × 8 estilos)", async () => {
     // Referência gravada antes da Etapa 1B: qualquer mudança no que o Essential gera quebra este teste.
     const hashes: Record<string, string> = {};
     for (const segment of SEGMENT_IDS) {

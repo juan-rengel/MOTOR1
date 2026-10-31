@@ -13,6 +13,9 @@ export const SEGMENT_IDS = [
   "restaurant",
   "services",
   "other",
+  // Acrescentados na Etapa 1C.1 (sempre no fim: os ids existentes nunca mudam de posição nem são removidos).
+  "barbershop",
+  "variety",
 ] as const;
 export const segmentIdSchema = z.enum(SEGMENT_IDS);
 export type SegmentId = z.infer<typeof segmentIdSchema>;
