@@ -1,0 +1,12 @@
+/*
+ * Máscara das imagens para a regressão visual (tests/e2e/visual.spec.ts), aplicada só durante a captura.
+ * Cada imagem vira um retângulo preto na PRÓPRIA camada, com o mesmo tamanho e posição: mudanças de
+ * dimensão, proporção ou posição continuam aparecendo, e textos, botões e degradês sobre as imagens
+ * continuam visíveis e comparados. Sem transição, o filtro vale no mesmo instante (algumas imagens
+ * têm transição CSS e seriam capturadas antes de escurecer).
+ */
+img,
+video {
+  filter: brightness(0) !important;
+  transition: none !important;
+}

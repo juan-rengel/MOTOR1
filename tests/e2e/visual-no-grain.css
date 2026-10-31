@@ -1,0 +1,9 @@
+/*
+ * Oculta somente a textura de granulação de filme (.site-grain::after) durante a captura da
+ * regressão visual (tests/e2e/visual.spec.ts). É ruído decorativo aleatório: não comprime e
+ * dobraria o tamanho das referências. A existência e as propriedades da granulação têm
+ * verificação própria no mesmo arquivo de teste.
+ */
+.site-grain::after {
+  display: none !important;
+}

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { SEGMENTS } from "@/config/segments";
 import { VISUAL_STYLE_LIST } from "@/config/styles";
 import { emptySocialLinks, SEGMENT_IDS, type BusinessInfo, type SegmentId } from "@/domain/business";
@@ -153,5 +154,29 @@ describe("pacotes de texto novos", () => {
     const b = business(segment);
     const text = [...pack.heroTitles, pack.heroSubtitle(b), pack.offeringDescription("Item", b), pack.aboutText(b), pack.whatsappMessage(b)].join(" ").toLowerCase();
     expect(text).not.toMatch(/\d|r\$|melhor|nº ?1|premiad|certificad|@|https?:/);
+  });
+});
+
+describe("referência fixa do Essential", () => {
+  /** Remove os identificadores aleatórios (seções e itens de lista) para comparar o conteúdo gerado. */
+  const normalizeIds = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(normalizeIds);
+    if (value && typeof value === "object") {
+      return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, k === "id" ? "<id>" : normalizeIds(v)]));
+    }
+    return value;
+  };
+  const FIXED = { ownerId: "local", now: new Date("2026-01-01T00:00:00.000Z"), id: "00000000-0000-4000-8000-000000000000" };
+
+  it("gera exatamente o mesmo conteúdo da referência gravada (12 segmentos × 8 estilos)", async () => {
+    // Referência gravada antes da Etapa 1B: qualquer mudança no que o Essential gera quebra este teste.
+    const hashes: Record<string, string> = {};
+    for (const segment of SEGMENT_IDS) {
+      for (const style of VISUAL_STYLE_LIST) {
+        const project = createProjectFromTemplate({ templateId: essential.id, style: style.id, business: business(segment) }, FIXED);
+        hashes[`${segment} | ${style.id}`] = createHash("sha256").update(JSON.stringify(normalizeIds(project))).digest("hex");
+      }
+    }
+    await expect(JSON.stringify(hashes, null, 2) + "\n").toMatchFileSnapshot("../../src/features/templates/__snapshots__/essential-template.reference.json");
   });
 });
