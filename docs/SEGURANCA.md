@@ -20,8 +20,12 @@
 | Logs | Erros internos registram apenas a mensagem, sem dados do projeto ou do visitante. |
 | WhatsApp | Links só com números válidos informados pelo usuário; nada é enviado sem a ação do visitante. |
 | Rota de captura | `/dev/capture` responde 404 fora do desenvolvimento (verificado em teste). |
+| Otimizador de imagens (`/_next/image`) | Só otimiza `/assets/demo/**` sem query string (`localPatterns`); qualidade única (75) e larguras fixas. Qualquer outro caminho, query string, qualidade ou largura recebe 400; URLs externas nunca passam por ele. Respostas com `Content-Security-Policy: script-src 'none'; frame-src 'none'; sandbox`, `nosniff` e `Content-Disposition: attachment`. |
+| Uploads fora do otimizador | Na Etapa 1B, a versão otimizada de um upload continuou sendo servida do cache depois da exclusão do arquivo (original 404, otimizada 200) e com `Cache-Control: public`. Por isso `/api/assets/*/file` **não** está em `localPatterns`: uploads são entregues como antes, direto da rota do arquivo. |
 
 ## Pendente (antes de qualquer uso público)
+
+- **Otimização segura dos uploads (Fase 9):** só reativar com invalidação das versões otimizadas na exclusão, cache privado e acesso autenticado (o otimizador padrão do Next não repassa cabeçalhos de autenticação).
 
 1. **Autenticação real** com sessão verificada no servidor (FASE 9) e controle de acesso por projeto.
 2. **Content-Security-Policy completa** para as páginas (exige nonces para os scripts do Next.js).

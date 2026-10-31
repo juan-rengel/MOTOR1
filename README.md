@@ -27,6 +27,7 @@ Esta é a **primeira versão funcional**: roda localmente, sem contas externas e
 | Verificações de qualidade no editor (botões sem destino, imagens sem descrição, contraste) | ✅ |
 | Sugestões de texto por **regras locais** (sem IA, identificadas como tal) | ✅ |
 | Exportação do projeto em JSON | ✅ |
+| Imagens de demonstração otimizadas (tamanhos sob medida e WebP pelo otimizador nativo do Next.js), capa com prioridade de carregamento | ✅ |
 | IA real, contas de usuário, banco remoto, publicação na internet, domínios | ⏳ fases futuras |
 
 ---
@@ -135,7 +136,9 @@ npx playwright install chromium
 npm run test:e2e:full
 ```
 
-Os testes ponta a ponta usam a pasta `.data-test` (seus projetos em `.data` não são tocados) e cobrem: criação pelo assistente, edição com atualização ao vivo, desfazer/refazer, salvar e recarregar, reordenar/adicionar/remover seções, cores, larguras de tela, exclusão, validações, segurança da API (origem, revisão, links perigosos, uploads), acessibilidade (axe), movimento reduzido, cenas 3D, substituto sem WebGL e carregamento de GLB.
+Os testes ponta a ponta usam a pasta `.data-test` (seus projetos em `.data` não são tocados) e cobrem: criação pelo assistente, edição com atualização ao vivo, desfazer/refazer, salvar e recarregar, reordenar/adicionar/remover seções, cores, larguras de tela, exclusão, validações, segurança da API (origem, revisão, links perigosos, uploads), acessibilidade (axe), movimento reduzido, cenas 3D, substituto sem WebGL, carregamento de GLB, imagens otimizadas, orçamento de bytes por página e regressão visual dos modelos.
+
+Proteções contra alterações acidentais: os testes unitários conferem o hash dos arquivos protegidos (modelos, imagens de demonstração, cenas 3D) e o conteúdo gerado pelos modelos; a regressão visual (`tests/e2e/visual.spec.ts`) compara capturas com referências gravadas e **roda só no Linux** — no Windows ela é pulada com aviso, porque as fontes são renderizadas de outro jeito. Detalhes em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 
 ## Estrutura do projeto
 
@@ -180,6 +183,8 @@ Detalhes técnicos em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 - **Imagens demonstrativas** são renderizações das próprias cenas 3D (não são fotos). Substitua pelas fotos reais do negócio.
 - **Modelos GLB com compressão Draco** não são carregados (exigiriam baixar o decodificador de um servidor externo); usam a imagem substituta.
 - **Upload de fontes, SVG e ícones próprios** ainda não é aceito (SVG é bloqueado por segurança).
+- **Imagens enviadas (uploads) não são otimizadas**: chegam ao visitante no tamanho original. Só as imagens de demonstração passam pelo otimizador; a otimização segura dos uploads fica para a FASE 9 (ver [`docs/SEGURANCA.md`](docs/SEGURANCA.md)).
+- **Otimizador de imagens no Windows**: usa o `sharp` que já vem com o Next.js (a versão para Windows está no `package-lock.json`), então não deve exigir instalação extra — **ainda não verificado em uma máquina Windows**. A primeira visualização de cada imagem é um pouco mais lenta enquanto ela é otimizada; depois fica em cache em `.next/cache/images`.
 - **Desempenho medido apenas em navegador sem GPU** (ambiente de testes). Em aparelhos reais a cena 3D usa a placa de vídeo; a qualidade se ajusta automaticamente, mas não há medição de Lighthouse registrada.
 - Sem modelos dedicados (ainda) para advocacia, odontologia, móveis, academia, barbearia, restaurante, serviços e outros negócios — esses segmentos usam o modelo universal **Essencial** (textos do próprio segmento, sem imagens nem cena 3D). Modelos dedicados só podem ser usados no segmento para o qual foram desenhados.
 
@@ -187,7 +192,7 @@ Detalhes técnicos em [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md).
 
 1. **FASE 8 — IA**: escolher provedor, definir custos/limites e implementar `ContentGenerator` no servidor (ver [`docs/INTEGRACOES.md`](docs/INTEGRACOES.md)).
 2. **FASE 9 — Firebase**: autenticação real, driver de projetos no Firestore e uploads no Storage, com regras de acesso por usuário.
-3. **FASE 10 — Publicação**: hospedagem dos sites gerados, domínios, otimização de imagens e medição de desempenho.
+3. **FASE 10 — Publicação**: hospedagem dos sites gerados, domínios e medição de desempenho (a otimização das imagens de demonstração já existe; a das imagens enviadas depende da FASE 9).
 4. Novos modelos por segmento (advocacia, odontologia, móveis — a cena de GLB já atende móveis —, academia).
 
 ## Futuras integrações
