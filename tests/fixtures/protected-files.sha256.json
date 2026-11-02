@@ -35,6 +35,7 @@
     "public/assets/demo/fashion/sneaker-sand-green.jpg": "1d252a36074ab85a86a97740873421515e6bc9b3767cad3a38bf737f897e6779",
     "public/assets/demo/fashion/sneaker-top.jpg": "402ac613004bd052854a31877c77608d4a2c625838dc3fb432cb471f218ca594",
     "public/assets/demo/fashion/sneaker-white-rose.jpg": "248585225d64cbc7b96cbfe84bca1c14ee279303d7fadad5e6244d14e732dd73",
+    "public/assets/demo/mechanic-real/preview.jpg": "9ae8666a96806ed0af6cce3929a33a837edf697c011c836ba5290d80757713f8",
     "public/assets/demo/mechanic/car-front.jpg": "0c52faea29f750956ee59240e7d5bf7414a50df7e21f15bb7844288f92d9d576",
     "public/assets/demo/mechanic/car-rear.jpg": "4be2f7dbd291a71cfec879062437dde0da2e6224ff63ff7d0ec88ec562a7aeb1",
     "public/assets/demo/mechanic/car-side.jpg": "11faccd5184183abc1703dad549c72010cae3873712219e0c04141a8a9e567e8",
@@ -88,7 +89,7 @@
     "src/features/templates/fashion.ts": "8250018e255b739be9be419209494d57ab76898695410d8ce74dddb512eecaa4",
     "src/features/templates/mechanic.ts": "1688ef016ff9427474ab9d3d6ee814f17d2d4ee47412bc4bb073b71c09546a59",
     "src/features/templates/optics.ts": "0c5b95c2ffddd4cbd2de9da4b392b7d994248733791c69a4b9c9b06ef6b702ec",
-    "src/features/templates/registry.ts": "79e3989be788f41a8abef8af017e9604cfd6c09d5a1586370dd616e984caf3c3",
+    "src/features/templates/registry.ts": "fdb8269220a92ba6b0cb49a23c645e3cb8c9622f9284b1c35eca86b12a9279e7",
     "src/features/templates/types.ts": "1fe37ae0e7e7d85f5e769d474860ce8e1624716f3a749cfc3ffcb679f90d4594"
   }
 }

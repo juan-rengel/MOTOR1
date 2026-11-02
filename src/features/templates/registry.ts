@@ -2,6 +2,7 @@ import type { SegmentId } from "@/domain/business";
 import { essentialTemplate } from "./essential";
 import { fashionTemplate } from "./fashion";
 import { mechanicTemplate } from "./mechanic";
+import { mechanicRealTemplate } from "./mechanic-real";
 import { opticsTemplate } from "./optics";
 import type { TemplateDefinition } from "./types";
 
@@ -9,7 +10,14 @@ import type { TemplateDefinition } from "./types";
  * Registro de modelos. Para adicionar um modelo: criar o arquivo em
  * features/templates/<nome>.ts e incluí-lo nesta lista (novos modelos entram no fim).
  */
-export const TEMPLATES: readonly TemplateDefinition[] = [mechanicTemplate, opticsTemplate, fashionTemplate, essentialTemplate];
+export const TEMPLATES: readonly TemplateDefinition[] = [
+  mechanicTemplate,
+  opticsTemplate,
+  fashionTemplate,
+  essentialTemplate,
+  // Etapa 1C.2 — no fim da lista: a Garagem continua a primeira recomendada da mecânica.
+  mechanicRealTemplate,
+];
 
 export function getTemplate(id: string): TemplateDefinition | undefined {
   return TEMPLATES.find((t) => t.id === id);

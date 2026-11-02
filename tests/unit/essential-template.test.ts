@@ -127,7 +127,7 @@ describe("compatibilidade entre modelo e segmento", () => {
       const { recommended, others } = templatesForSegment(segment);
       return { recommended: recommended.map((t) => t.id), others: others.map((t) => t.id) };
     };
-    expect(ids("mechanic")).toEqual({ recommended: ["mechanic-cinematic"], others: ["universal-essential"] });
+    expect(ids("mechanic")).toEqual({ recommended: ["mechanic-cinematic", "mechanic-real"], others: ["universal-essential"] });
     expect(ids("sneakers")).toEqual({ recommended: ["fashion-editorial"], others: ["universal-essential"] });
     expect(ids("law")).toEqual({ recommended: ["universal-essential"], others: [] });
   });
