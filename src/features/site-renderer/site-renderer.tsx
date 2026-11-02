@@ -57,6 +57,9 @@ export function SiteRenderer({ project, mode, selectedSectionId, onSelectSection
           className={cn("site-root min-h-screen", project.theme.grain && "site-grain")}
           style={themeToCssVars(project.theme)}
           data-editor-mode={mode === "editor" || undefined}
+          // Identifica o modelo do site: estilos próprios de um modelo são escopados por este atributo
+          // (ex.: [data-template="mechanic-real"]) e nunca alcançam os demais.
+          data-template={project.templateId}
           onClickCapture={onClickCapture}
         >
           <a href="#conteudo" className="sr-only z-[80] rounded bg-site-primary px-4 py-2 text-site-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
