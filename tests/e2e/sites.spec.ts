@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { expectNoHorizontalOverflow, trackErrors } from "./helpers";
 
 /** Modelos disponíveis (manter em sincronia com src/features/templates/registry.ts). */
-const TEMPLATE_IDS = ["mechanic-cinematic", "optics-atelier", "fashion-editorial", "universal-essential"];
+const TEMPLATE_IDS = ["mechanic-cinematic", "optics-atelier", "fashion-editorial", "universal-essential", "mechanic-real"];
 
 test.describe("sites gerados (demonstrações)", () => {
   for (const id of TEMPLATE_IDS) {
