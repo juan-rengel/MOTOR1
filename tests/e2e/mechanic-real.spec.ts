@@ -236,3 +236,67 @@ test.describe("Oficina Real — cartões, assistente e criação", () => {
     }
   });
 });
+
+/** Valor calculado de uma variável CSS na raiz do site. */
+const rootVar = (page: Page, name: string) => page.locator(".site-root").evaluate((el, n) => getComputedStyle(el).getPropertyValue(n).trim(), name);
+
+test.describe("Oficina Real — infraestrutura visual (passo 6A)", () => {
+  test("C1: raiz com movimento e nível do aparelho reais, e marcadores data-slot", async ({ page }) => {
+    const errors = trackErrors(page);
+    await page.goto(DEMO);
+    const root = page.locator(".site-root");
+    await expect(root).toHaveAttribute("data-motion", "on");
+    expect(["high", "medium", "low"]).toContain(await root.getAttribute("data-tier"));
+
+    const slot = (name: string) => page.locator(`[data-slot="${name}"]`);
+    for (const name of ["hero-backdrop", "hero-overlay", "hero-content", "hero-actions", "services-grid", "about-layout", "highlight-list", "steps-list", "faq-list", "cta-panel", "contact-list", "contact-form", "site-header", "menu-button", "mobile-menu", "site-footer"]) {
+      await expect(slot(name), name).toHaveCount(1);
+    }
+    expect(await slot("service-card").count()).toBeGreaterThanOrEqual(3);
+    await expect(slot("highlight")).toHaveCount(3);
+    await expect(slot("step")).toHaveCount(4);
+    await expect(slot("step-badge")).toHaveCount(4);
+    await expect(slot("faq-item")).toHaveCount(3);
+    expect(await slot("section-heading").count()).toBeGreaterThanOrEqual(4);
+    // Tokens do visual próprio ativos, com efeitos ligados (movimento normal, ponteiro fino).
+    expect(await rootVar(page, "--wr-surface-raised")).not.toBe("");
+    expect(await rootVar(page, "--wr-sheen")).toBe("1");
+    expect(errors).toEqual([]);
+  });
+
+  test("C2: movimento reduzido — data-motion=off e efeitos desligados nos tokens", async ({ page }) => {
+    const errors = trackErrors(page);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(DEMO);
+    await expect(page.locator(".site-root")).toHaveAttribute("data-motion", "off");
+    expect(await rootVar(page, "--wr-duration")).toBe("0s");
+    expect(await rootVar(page, "--wr-sheen")).toBe("0");
+    expect(await rootVar(page, "--wr-tilt")).toBe("0deg");
+    expect(errors).toEqual([]);
+  });
+
+  test("C3: aparelho fraco (2 núcleos) — data-tier=low e efeitos simplificados", async ({ page }) => {
+    const errors = trackErrors(page);
+    await page.addInitScript(() => {
+      Object.defineProperty(Navigator.prototype, "hardwareConcurrency", { get: () => 2, configurable: true });
+    });
+    await page.goto(DEMO);
+    const root = page.locator(".site-root");
+    await expect(root).toHaveAttribute("data-tier", "low");
+    await expect(root).toHaveAttribute("data-motion", "on");
+    expect(await rootVar(page, "--wr-sheen")).toBe("0");
+    expect(await rootVar(page, "--wr-tilt")).toBe("0deg");
+    expect(errors).toEqual([]);
+  });
+
+  test("C4: isolamento — a Garagem tem os atributos, mas nenhum token da Oficina Real", async ({ page }) => {
+    const errors = trackErrors(page);
+    await page.goto("/demo/mechanic-cinematic");
+    const root = page.locator(".site-root");
+    await expect(root).toHaveAttribute("data-template", "mechanic-cinematic");
+    await expect(root).toHaveAttribute("data-motion", "on");
+    expect(["high", "medium", "low"]).toContain(await root.getAttribute("data-tier"));
+    for (const name of ["--wr-surface-raised", "--wr-shadow-key", "--wr-sheen", "--wr-duration"]) expect(await rootVar(page, name), name).toBe("");
+    expect(errors).toEqual([]);
+  });
+});

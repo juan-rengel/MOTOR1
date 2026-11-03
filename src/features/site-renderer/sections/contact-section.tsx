@@ -23,7 +23,7 @@ export function ContactSection({ section }: { section: SectionOf<"contact"> }) {
       <div className="site-container grid gap-12 md:grid-cols-2 md:gap-20">
         <div>
           <SectionHeading eyebrow={p.eyebrow} title={p.title} subtitle={p.subtitle} className="mb-10 md:mb-12" />
-          <Reveal as="ul" stagger className="space-y-5">
+          <Reveal as="ul" stagger className="space-y-5" data-slot="contact-list">
             {hasWhatsApp && (
               <li>
                 <CtaButton cta={{ label: "Conversar no WhatsApp", action: "whatsapp", target: `Olá, ${business.name}! Vim pelo site.` }} business={business} size="lg" />

@@ -108,7 +108,7 @@ export function ContactForm({ business, intro, demo = false }: { business: Busin
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="site-card space-y-5 p-6 md:p-8" aria-describedby={`${id}-intro`}>
+    <form onSubmit={onSubmit} noValidate className="site-card space-y-5 p-6 md:p-8" aria-describedby={`${id}-intro`} data-slot="contact-form">
       <p id={`${id}-intro`} className="text-sm text-site-muted">
         {intro}
       </p>

@@ -13,7 +13,7 @@ export function SiteFooter() {
   const year = new Date(project.updatedAt).getFullYear();
 
   return (
-    <footer className="border-t border-site-border bg-site-bg">
+    <footer className="border-t border-site-border bg-site-bg" data-slot="site-footer">
       <div className="site-container grid gap-10 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <p className="site-heading text-2xl">{business.name}</p>

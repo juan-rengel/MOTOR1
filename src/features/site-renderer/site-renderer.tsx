@@ -2,9 +2,11 @@
 
 import "./site-fonts";
 import "./site.css";
-import { useEffect, type MouseEvent } from "react";
+// Visuais próprios de modelos: depois de site.css, cada um escopado por [data-template="<id>"].
+import "./skins/workshop.css";
+import { useEffect, type MouseEvent, type ReactNode } from "react";
 import type { Project } from "@/domain/project";
-import { MotionProvider } from "@/features/animations/motion-context";
+import { MotionProvider, useMotion } from "@/features/animations/motion-context";
 import { ScrollTrigger, ensureGsap } from "@/features/animations/gsap";
 import { cn } from "@/lib/cn";
 import { FloatingWhatsApp } from "./chrome/floating-whatsapp";
@@ -52,16 +54,7 @@ export function SiteRenderer({ project, mode, selectedSectionId, onSelectSection
   return (
     <SiteProvider project={project} mode={mode}>
       <MotionProvider settings={project.motion} forceDisabled={motionDisabled}>
-        <div
-          id="top"
-          className={cn("site-root min-h-screen", project.theme.grain && "site-grain")}
-          style={themeToCssVars(project.theme)}
-          data-editor-mode={mode === "editor" || undefined}
-          // Identifica o modelo do site: estilos próprios de um modelo são escopados por este atributo
-          // (ex.: [data-template="mechanic-real"]) e nunca alcançam os demais.
-          data-template={project.templateId}
-          onClickCapture={onClickCapture}
-        >
+        <SiteRoot project={project} mode={mode} onClickCapture={onClickCapture}>
           <a href="#conteudo" className="sr-only z-[80] rounded bg-site-primary px-4 py-2 text-site-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
             Pular para o conteúdo
           </a>
@@ -82,8 +75,43 @@ export function SiteRenderer({ project, mode, selectedSectionId, onSelectSection
           </main>
           <SiteFooter />
           <FloatingWhatsApp />
-        </div>
+        </SiteRoot>
       </MotionProvider>
     </SiteProvider>
+  );
+}
+
+/**
+ * Raiz do site. Fica dentro do MotionProvider para expor ao CSS o movimento efetivo
+ * (data-motion) e o nível do aparelho (data-tier), com os mesmos valores usados pelas
+ * animações. No servidor: "on"/"medium" até a hidratação aplicar os valores reais.
+ */
+function SiteRoot({
+  project,
+  mode,
+  onClickCapture,
+  children,
+}: {
+  project: Project;
+  mode: RenderMode;
+  onClickCapture: (event: MouseEvent<HTMLDivElement>) => void;
+  children: ReactNode;
+}) {
+  const { enabled, tier } = useMotion();
+  return (
+    <div
+      id="top"
+      className={cn("site-root min-h-screen", project.theme.grain && "site-grain")}
+      style={themeToCssVars(project.theme)}
+      data-editor-mode={mode === "editor" || undefined}
+      // Identifica o modelo do site: estilos próprios de um modelo são escopados por este atributo
+      // (ex.: [data-template="mechanic-real"]) e nunca alcançam os demais.
+      data-template={project.templateId}
+      data-motion={enabled ? "on" : "off"}
+      data-tier={tier}
+      onClickCapture={onClickCapture}
+    >
+      {children}
+    </div>
   );
 }

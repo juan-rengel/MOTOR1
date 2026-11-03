@@ -32,12 +32,12 @@ export function StepsSection({ section }: { section: SectionOf<"steps"> }) {
     <section className="site-section bg-site-surface">
       <div className="site-container grid gap-12 md:grid-cols-[1fr_1.4fr] md:gap-20">
         <SectionHeading eyebrow={p.eyebrow} title={p.title} subtitle={p.subtitle} className="md:sticky md:top-28 md:self-start" />
-        <ol ref={listRef} className="relative space-y-12 pl-14">
-          <span className="absolute top-2 bottom-2 left-[19px] w-px bg-site-border" aria-hidden />
-          <span ref={lineRef} className="absolute top-2 bottom-2 left-[19px] w-px origin-top bg-site-primary" aria-hidden />
+        <ol ref={listRef} className="relative space-y-12 pl-14" data-slot="steps-list">
+          <span className="absolute top-2 bottom-2 left-[19px] w-px bg-site-border" aria-hidden data-slot="steps-track" />
+          <span ref={lineRef} className="absolute top-2 bottom-2 left-[19px] w-px origin-top bg-site-primary" aria-hidden data-slot="steps-progress" />
           {p.items.map((step, i) => (
-            <Reveal as="li" key={step.id} className="relative">
-              <span className="absolute top-0 -left-14 flex size-10 items-center justify-center rounded-full border border-site-primary bg-site-surface font-mono text-sm text-site-primary">
+            <Reveal as="li" key={step.id} className="relative" data-slot="step">
+              <span className="absolute top-0 -left-14 flex size-10 items-center justify-center rounded-full border border-site-primary bg-site-surface font-mono text-sm text-site-primary" data-slot="step-badge">
                 {i + 1}
               </span>
               <h3 className="site-heading text-2xl md:text-3xl">{step.title}</h3>

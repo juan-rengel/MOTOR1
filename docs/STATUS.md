@@ -1,6 +1,6 @@
 # STATUS — Cinematic Web Studio (Motor 1)
 
-Última atualização: 31/10/2026.
+Última atualização: 03/11/2026.
 
 ## Fases
 
@@ -25,7 +25,8 @@
 | 0 — Instruções e skills do Claude Code | ✅ Concluída (30/10/2026) | `CLAUDE.md` (regras permanentes), `.claude/settings.json` (permissões: verificação liberada; instalação, `npx`, commit, push e geração de mídia sob confirmação; segredos `.env`, recursos de demonstração existentes, publicação e comandos destrutivos bloqueados) e skills `novo-modelo-segmento`, `revisao-visual`, `verificar`, `recursos-demo`. Auditoria final com 10 correções aplicadas. `.gitignore` passa a ignorar `.claude/settings.local.json`. Nenhum componente, página, modelo, teste ou recurso alterado. |
 | 1A — Fim do conteúdo de outro segmento | ✅ Concluída (30/10/2026, commit `f1ac997`) | Modelo universal **Essencial** (`universal-essential`: sem imagens e sem cena 3D, textos do segmento escolhido). O assistente oferece só os modelos dedicados ao segmento e o Essencial; o servidor recusa modelo dedicado em outro segmento (422). Pacotes de texto novos para barbearia/salão, restaurante, móveis e serviços. Os 3 modelos antigos geram exatamente o mesmo conteúdo (referência fixa) e as demonstrações ficaram idênticas pixel a pixel. Projetos antigos continuam abrindo. |
 | 1B — Imagens e proteção contra regressões | ✅ Concluída (31/10/2026, commits `b4c6452`, `4b2a5aa`, `9f490ec`, `fddcd97`) | **Proteção:** hashes de 82 arquivos protegidos, referência fixa do Essencial (96 combinações; ampliada para 112 na Etapa 1C.1), regressão visual dos 4 modelos em 390/834/1440 px (8,02 MB de referências; imagens mascaradas na própria camada nos modelos antigos, Essencial sem máscara; granulação oculta só na captura e verificada à parte; tolerância de 1% de cor, zero pixels acima). **ESLint** ignora `playwright-report/` e `test-results/`. **Imagens:** otimizador nativo do Next só para `/assets/demo` (WebP, qualidade 75), `sizes` por seção, capa com `fetchpriority="high"`; uploads e URLs externas sem otimização (uploads reavaliados na Fase 9 — ver SEGURANCA.md). **Orçamento de bytes** por demonstração. Modelos protegidos idênticos (referências visuais e fixas). |
-| 1C.1 — Segmentos na ordem oficial | ✅ Implementada (31/10/2026), aguardando aprovação final e commit | **14 segmentos.** Novos: **Barbearia** (`barbershop`) e **Loja de variedades** (`variety`), acrescentados no fim da lista de ids. **Beleza** (`beauty`, antes "Barbearia e salão") passa a tratar de unhas, cílios, sobrancelhas e cabelo; **Loja de calçados** (`sneakers`, antes "Loja de tênis") ganha descrição e sugestões de calçados — ids mantidos, sem migração. Assistente com os seis segmentos prioritários primeiro (Mecânica, Barbearia, Beleza, Roupas, Calçados, Variedades). Textos novos de Barbearia e Variedades; textos de Beleza reescritos; pacote `sneakers` byte a byte inalterado (usado pela Coleção Editorial). Os novos segmentos usam o Essencial até terem modelo dedicado. Referência do Essencial: 112 combinações. Modelos protegidos intactos. |
+| 1C.1 — Segmentos na ordem oficial | ✅ Concluída (31/10/2026, commit `757de5a`) | **14 segmentos.** Novos: **Barbearia** (`barbershop`) e **Loja de variedades** (`variety`), acrescentados no fim da lista de ids. **Beleza** (`beauty`, antes "Barbearia e salão") passa a tratar de unhas, cílios, sobrancelhas e cabelo; **Loja de calçados** (`sneakers`, antes "Loja de tênis") ganha descrição e sugestões de calçados — ids mantidos, sem migração. Assistente com os seis segmentos prioritários primeiro (Mecânica, Barbearia, Beleza, Roupas, Calçados, Variedades). Textos novos de Barbearia e Variedades; textos de Beleza reescritos; pacote `sneakers` byte a byte inalterado (usado pela Coleção Editorial). Os novos segmentos usam o Essencial até terem modelo dedicado. Referência do Essencial: 112 combinações. Modelos protegidos intactos. |
+| 1C.2 — Modelo Oficina Real (mecânica) | 🟡 Em andamento (passos 0–4 com commits `9223a53`, `9866187`, `563a50e`, `2df95a2`; passo 6A implementado em 03/11/2026, aguardando aprovação e commit) | Modelo dedicado `mechanic-real` ("Oficina Real"), registrado no fim da lista: a Garagem continua a primeira recomendada da mecânica. Só tipos de seção existentes, sem cena 3D, galeria oculta até ter fotos, contatos vazios na demonstração. Atributo `data-template` na raiz do site (passo 1). Testes ponta a ponta próprios (passo 4). **Passo 6A — infraestrutura visual isolada:** `src/features/site-renderer/skins/workshop.css` (só variáveis `--wr-*` derivadas do tema; todo seletor com o prefixo `.site-root[data-template="mechanic-real"]`, verificado por teste), 33 marcadores neutros `data-slot` nos componentes compartilhados, `data-motion` e `data-tier` na raiz (valores do `MotionProvider`). Correção de acessibilidade: o subtítulo da chamada sobre a cor principal deixou de usar `opacity-80` — antes da hidratação o contraste ficava abaixo de 4,5:1 na Coleção (3,75) e no Essencial (3,89) e o teste axe falhava de forma intermitente; depois da hidratação a opacidade já era 1. Nenhuma diferença visual (15 capturas, 0 pixel) e as 12 referências inalteradas. Próximos passos (6B–6F: visual 3D em CSS; 7: fotografias; 8: referências visuais e orçamento; 9: documentação) só com aprovação. |
 | 1C (demais) — Seções e modelos por segmento | ⏸ Aguardando plano | Conforme o planejamento aprovado da 1C: seções novas e modelos dedicados intercalados por segmento, na ordem oficial, começando pela Mecânica. |
 | 2 a 8 | ⏸ Aguardando aprovação | Cada etapa começa com plano apresentado e aprovação explícita. Dados estruturados `LocalBusiness` (JSON-LD) ficam para a Etapa 6 (decisão D2). |
 
@@ -41,7 +42,7 @@ Resumo em [`ARQUITETURA.md`](ARQUITETURA.md). Pontos centrais:
 ## Funcionalidades existentes
 
 - Criação de projeto (dados do negócio com validação de telefone/e-mail/redes, estilo visual, modelo recomendado por segmento, revisão).
-- 3 modelos dedicados + o modelo universal Essencial, 8 estilos, 14 segmentos configurados — no assistente, os seis prioritários primeiro: Oficina mecânica, Barbearia, Beleza, Loja de roupas, Loja de calçados e Loja de variedades. Modelos dedicados só são oferecidos (e aceitos pelo servidor) no próprio segmento.
+- 4 modelos dedicados (Garagem, Ótica Atelier, Coleção Editorial e Oficina Real) + o modelo universal Essencial, 8 estilos, 14 segmentos configurados — no assistente, os seis prioritários primeiro: Oficina mecânica, Barbearia, Beleza, Loja de roupas, Loja de calçados e Loja de variedades. Modelos dedicados só são oferecidos (e aceitos pelo servidor) no próprio segmento.
 - Imagens de demonstração otimizadas pelo Next (tamanhos sob medida, WebP qualidade 75), capa com prioridade alta de carregamento; uploads e URLs externas entregues sem otimização.
 - Editor: reordenar/adicionar/duplicar/ocultar/remover seções (remoção com confirmação), campos gerados por definição, seletor de mídia (biblioteca, upload, URL https), botões com ação (WhatsApp, seção, link, telefone, e-mail) e alerta quando o destino falta, cores com contraste calculado, fontes, cantos, logotipo, movimento, cena 3D (cena, variação, câmera, qualidade, ambiente, cores, imagem substituta, GLB), SEO, slug, domínio desejado, exportação JSON.
 - Verificações de qualidade (conteúdo demonstrativo, botões sem destino, imagens sem texto alternativo, contraste, GLB ausente, SEO).
@@ -49,15 +50,24 @@ Resumo em [`ARQUITETURA.md`](ARQUITETURA.md). Pontos centrais:
 - Biblioteca de recursos com upload validado por assinatura, licença e texto alternativo.
 - Cenas 3D: carro, óculos (quadrado, redondo, gatinho, aviador), tênis, tecido, GLB próprio. Imagens de demonstração geradas a partir delas.
 
-## Testes realizados (última execução: 31/10/2026, Etapa 1C.1 — passo 5)
+## Testes realizados (última execução: 03/11/2026, Etapa 1C.2 — passo 6A)
 
 | Verificação | Comando | Resultado |
 |---|---|---|
 | Tipos | `npm run typecheck` | ✅ sem erros |
 | Lint | `npm run lint` | ✅ 0 problemas (antes e depois da suíte ponta a ponta) |
-| Unitários/integração | `npm run test` | ✅ 340 testes, 11 arquivos (inclui integridade de 82 arquivos protegidos, referência fixa dos modelos antigos — 36 combinações —, referência do Essencial — 112 combinações — e 24 testes de segmentos) |
+| Unitários/integração | `npm run test` | ✅ 370 testes, 13 arquivos (inclui integridade de 83 arquivos protegidos, referência fixa dos modelos antigos — 36 combinações —, referência do Essencial — 112 —, referência da Oficina Real — 9 —, testes de segmentos e o teste de isolamento do `workshop.css`) |
 | Build de produção | `npm run build` | ✅ sem avisos |
-| Ponta a ponta | `npm run test:e2e` | ✅ 77 testes (inclui 12 capturas de regressão visual, 8 verificações da granulação, 4 de imagens, 4 de orçamento de bytes e 3 do assistente com os segmentos novos) |
+| Ponta a ponta | `npm run test:e2e` | ✅ 94 testes, duas execuções completas seguidas sem falhas, ignorados ou instáveis (inclui 12 capturas de regressão visual, 8 verificações da granulação, 4 de imagens, 4 de orçamento de bytes e 12 da Oficina Real) |
+| Acessibilidade repetida | `npx playwright test sites.spec.ts -g acessibilidade --repeat-each=10` | ✅ 50/50 (5 modelos × 10) |
+
+### Etapa 1C.2 — passo 6A (03/11/2026)
+
+Comparações feitas contra um build do commit `2df95a2` (antes) com o mesmo método:
+
+- **Aparência:** 15 capturas (5 modelos × 390/834/1440 px, movimento reduzido, sem WebGL, imagens mascaradas, sem granulação) idênticas pixel a pixel antes e depois, inclusive com a correção do subtítulo da chamada; o método foi validado com duas capturas seguidas do "antes" (0 pixel). As 12 referências visuais têm hash idêntico e passaram sem atualização.
+- **Contraste do subtítulo da chamada:** antes da hidratação (pacotes JS bloqueados) a opacidade era 0,8 e o axe reprovava a Coleção e o Essencial; depois da correção, aprovado nos 5 modelos antes da hidratação, após a hidratação e após a animação. Axe logo após carregar a página, 20 vezes por modelo: 0 falhas em 100 (antes: 15 falhas em 24 medições da Coleção e do Essencial, também no commit `2df95a2`).
+- **Bytes:** CSS do build 80.865 → 82.090 B (+1.225 B; +320 B com gzip — o `workshop.css` entra no mesmo arquivo do `site.css`); HTML de cada demonstração +120 a +282 B com gzip. Orçamento no celular (KB): Garagem 516 → 517, Ótica 584 → 584, Coleção 496 → 497, Essencial 388 → 389 (limites inalterados); Oficina Real 393 → 394 (ainda sem limite próprio).
 
 ### Etapa 1C.1 — comparação da referência do Essencial
 
@@ -114,6 +124,8 @@ Ambiente de teste sem GPU: as cenas 3D rodam em software (SwiftShader). Por isso
 - Uploads não são otimizados: o otimizador do Next manteve a versão otimizada acessível depois da exclusão do arquivo e com cache público. Reavaliar na Fase 9 (ver `docs/SEGURANCA.md`).
 - Otimizador de imagens no Windows não verificado em máquina real (o `sharp` para Windows x64 está no lockfile como dependência do Next).
 - Regressão visual roda só no Linux; no Windows é pulada com aviso.
+- Oficina Real ainda sem referências visuais e sem limite de orçamento de bytes (previstos para o passo 8 da Etapa 1C.2).
+- Os testes ponta a ponta de API, criação e navegação não apagam os projetos que criam em `.data-test` (dados isolados de teste, ignorados pelo Git); os testes da Oficina Real apagam os seus.
 - Modelos antigos em 834 px e 390 px: o objeto 3D (carro, óculos) sobrepõe parte do título da capa; em 834 px sem WebGL a imagem substituta da ótica aparece cortada na lateral. Já existia antes da Etapa 1A (renderização idêntica).
 - Essencial: o cartão na página inicial fica sozinho na segunda linha e sem selo de segmento (`src/app/page.tsx` fora do escopo da 1A); a imagem de prévia mostra o texto da demonstração ("Prestador de serviços") também quando o segmento escolhido é outro; serviços com 4 itens deixam um cartão isolado na grade; a descrição dos serviços repete o nome do serviço ("Orçamento: … solicite um orçamento"); a seção "Sobre" sem foto fica com bastante espaço vazio.
 - Loja de móveis deixou de poder usar a cena 3D da Garagem (modelo de outro segmento). A cena de modelo GLB próprio continua existindo; um modelo dedicado de móveis é previsto para a Etapa 4.
@@ -126,8 +138,8 @@ Ambiente de teste sem GPU: as cenas 3D rodam em software (SwiftShader). Por isso
 
 ## Próxima tarefa concreta
 
-1. Aprovação final da **Etapa 1C.1** e autorização de commit.
-2. Plano das próximas etapas da 1C, na ordem oficial e intercalando seções e modelos por segmento: primeiro a **Mecânica** (seções de serviços, horário e localização, capa fotográfica, pedido de orçamento; depois o modelo dedicado).
-3. Decisões pendentes antes do modelo de Mecânica: fonte das fotografias realistas e veículo sem marca (D2, D3).
+1. Aprovação do **passo 6A** da Etapa 1C.2 e autorização de commit.
+2. Plano do **passo 6B** (fundo em camadas e capa da Oficina Real, com e sem foto), usando os tokens `--wr-*` e os marcadores `data-slot`.
+3. Decisões pendentes antes do passo 7 (fotografias): fonte das fotografias realistas e veículo sem marca (D2, D3).
 
 Continuam dependendo de decisões do responsável: FASE 8 (provedor de IA, custos) e FASE 9 (projeto Firebase).

@@ -23,7 +23,7 @@ export function SectionHeading({
 }) {
   if (!eyebrow && !title && !subtitle) return null;
   return (
-    <div className={cn("mb-12 max-w-3xl md:mb-16", align === "center" && "mx-auto text-center", className)}>
+    <div className={cn("mb-12 max-w-3xl md:mb-16", align === "center" && "mx-auto text-center", className)} data-slot="section-heading">
       {eyebrow && (
         <Reveal as="p" variant="fade" className="site-eyebrow mb-4">
           {eyebrow}

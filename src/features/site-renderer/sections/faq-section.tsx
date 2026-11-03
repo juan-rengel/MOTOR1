@@ -12,12 +12,12 @@ export function FaqSection({ section }: { section: SectionOf<"faq"> }) {
     <section className="site-section">
       <div className="site-container grid gap-10 md:grid-cols-[1fr_1.6fr] md:gap-20">
         <SectionHeading eyebrow={p.eyebrow} title={p.title} className="md:mb-0" />
-        <Reveal as="div" stagger className="divide-y divide-site-border border-y border-site-border">
+        <Reveal as="div" stagger className="divide-y divide-site-border border-y border-site-border" data-slot="faq-list">
           {p.items.map((item) => (
-            <details key={item.id} className="group py-2">
+            <details key={item.id} className="group py-2" data-slot="faq-item">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg font-medium [&::-webkit-details-marker]:hidden">
                 {item.question}
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-site-border transition-transform duration-300 group-open:rotate-45 group-open:border-site-primary group-open:text-site-primary">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-site-border transition-transform duration-300 group-open:rotate-45 group-open:border-site-primary group-open:text-site-primary" data-slot="faq-icon">
                   <Plus className="size-4" aria-hidden />
                 </span>
               </summary>

@@ -67,6 +67,7 @@ export function SiteHeader() {
         scrolled && !open ? "border-b border-site-border/60 bg-site-bg/80 backdrop-blur-xl" : "border-b border-transparent",
         hidden && !open && "-translate-y-full",
       )}
+      data-slot="site-header"
     >
       <div className="site-container flex h-[4.5rem] items-center justify-between gap-6">
         <a href="#top" className="flex min-w-0 items-center gap-3" aria-label={`${business.name} — início`}>
@@ -102,6 +103,7 @@ export function SiteHeader() {
               aria-expanded={open}
               aria-controls="site-mobile-menu"
               aria-label={open ? "Fechar menu" : "Abrir menu"}
+              data-slot="menu-button"
               onClick={() => setOpen((v) => !v)}
             >
               {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
@@ -116,6 +118,7 @@ export function SiteHeader() {
           open ? "visible opacity-100" : "invisible opacity-0",
         )}
         hidden={!open}
+        data-slot="mobile-menu"
       >
         <nav aria-label="Menu" className="site-container flex h-full flex-col justify-between pt-8 pb-10">
           <ul className="space-y-1">

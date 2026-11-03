@@ -44,7 +44,7 @@ export function HeroSection({ section }: { section: SectionOf<"hero"> }) {
 
   return (
     <section className="relative flex min-h-[100svh] items-end overflow-hidden pt-28 pb-20 md:items-center md:pb-28">
-      <div className="absolute inset-0" aria-hidden>
+      <div className="absolute inset-0" aria-hidden data-slot="hero-backdrop">
         {p.mediaKind === "image" && (
           <Parallax className="absolute -inset-y-[12%] inset-x-0">
             <SiteImage image={p.image} priority className="size-full" />
@@ -62,13 +62,14 @@ export function HeroSection({ section }: { section: SectionOf<"hero"> }) {
         )}
         <div
           className="absolute inset-0"
+          data-slot="hero-overlay"
           style={{
             background: `linear-gradient(to top, var(--site-bg) 0%, color-mix(in srgb, var(--site-bg) ${Math.round(p.overlay * 100)}%, transparent) 55%, color-mix(in srgb, var(--site-bg) ${Math.round(p.overlay * 60)}%, transparent) 100%)`,
           }}
         />
       </div>
 
-      <div className={cn("site-container relative", centered && "text-center")}>
+      <div className={cn("site-container relative", centered && "text-center")} data-slot="hero-content">
         <div className={cn("max-w-4xl", centered && "mx-auto")}>
           {p.eyebrow && (
             <Reveal as="p" variant="fade" className={cn("site-eyebrow mb-6", centered && "justify-center")}>
@@ -81,7 +82,7 @@ export function HeroSection({ section }: { section: SectionOf<"hero"> }) {
               {p.subtitle}
             </Reveal>
           )}
-          <Reveal delay={0.6} className={cn("mt-10 flex flex-wrap gap-3", centered && "justify-center")}>
+          <Reveal delay={0.6} className={cn("mt-10 flex flex-wrap gap-3", centered && "justify-center")} data-slot="hero-actions">
             <CtaButton cta={p.primaryCta} business={project.business} size="lg" />
             <CtaButton cta={p.secondaryCta} business={project.business} size="lg" variant="outline" />
           </Reveal>

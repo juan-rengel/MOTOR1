@@ -1,0 +1,85 @@
+/*
+ * Oficina Real (mechanic-real) — visual próprio do modelo.
+ *
+ * Regras de isolamento (verificadas por tests/unit/workshop-skin.test.ts):
+ * - todo seletor começa com .site-root[data-template="mechanic-real"], então nada aqui
+ *   alcança outros modelos;
+ * - @keyframes só com nome "wr-*" (nomes de animação são globais);
+ * - sem :root, html, body, @import, @font-face, @property ou @layer.
+ *
+ * Etapa 1C.2, passo 6A: só variáveis (tokens). Variáveis sem uso não mudam a aparência;
+ * os efeitos chegam nas etapas seguintes e devem usar estes tokens, para que movimento
+ * reduzido e aparelhos fracos sejam tratados num ponto só (blocos no fim do arquivo).
+ *
+ * Tudo deriva das variáveis --site-* do tema: o visual funciona nos 8 estilos. Realces e
+ * sombras usam branco/preto com transparência (não --site-text), para não inverter nos
+ * estilos claros.
+ *
+ * Marcadores disponíveis nos componentes compartilhados (data-slot, sem estilo próprio):
+ * hero-backdrop, hero-overlay, hero-content, hero-actions, services-grid, service-card,
+ * service-index, service-icon, service-bar, services-list, service-row, section-heading,
+ * about-layout, highlight-list, highlight, highlight-icon, steps-list, steps-track,
+ * steps-progress, step, step-badge, faq-list, faq-item, faq-icon, cta-panel, contact-list,
+ * contact-form, gallery-grid, gallery-item, site-header, menu-button, mobile-menu, site-footer.
+ * Na raiz: data-motion ("on" | "off") e data-tier ("high" | "medium" | "low").
+ */
+
+.site-root[data-template="mechanic-real"] {
+  /* Superfícies e profundidade */
+  --wr-surface-raised: color-mix(in srgb, var(--site-surface) 92%, white);
+  --wr-surface-sunken: color-mix(in srgb, var(--site-bg) 85%, black);
+  --wr-edge-highlight: color-mix(in srgb, white 12%, transparent);
+  --wr-edge-shade: color-mix(in srgb, black 35%, transparent);
+  --wr-border-strong: color-mix(in srgb, var(--site-border) 60%, var(--site-text));
+
+  /* Luz */
+  --wr-light-primary: color-mix(in srgb, var(--site-primary) 22%, transparent);
+  --wr-light-accent: color-mix(in srgb, var(--site-accent) 14%, transparent);
+
+  /* Sombras: ambiente, direcional e base do botão 3D */
+  --wr-shadow-ambient: 0 1px 2px color-mix(in srgb, black 30%, transparent);
+  --wr-shadow-key: 0 22px 44px -22px color-mix(in srgb, black 70%, transparent);
+  --wr-button-base: color-mix(in srgb, var(--site-primary) 62%, black);
+  --wr-button-depth: 4px;
+
+  /* Movimento */
+  --wr-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --wr-duration: 0.35s;
+  --wr-lift: -4px;
+  --wr-press: 3px;
+  --wr-tilt: 2deg;
+  /* 1 = reflexos ligados; 0 = desligados */
+  --wr-sheen: 1;
+}
+
+/* Aparelho de baixo desempenho (data-tier vem de detectDeviceTier): sombra simples, sem reflexos nem inclinação. */
+.site-root[data-template="mechanic-real"][data-tier="low"] {
+  --wr-shadow-key: 0 10px 20px -14px color-mix(in srgb, black 60%, transparent);
+  --wr-sheen: 0;
+  --wr-tilt: 0deg;
+}
+
+/* Movimento desligado no projeto, no editor ("sem movimento") ou pelo sistema (data-motion vem do MotionProvider). */
+.site-root[data-template="mechanic-real"][data-motion="off"] {
+  --wr-duration: 0s;
+  --wr-lift: 0px;
+  --wr-tilt: 0deg;
+  --wr-sheen: 0;
+}
+
+/* Vale desde a primeira pintura, antes da hidratação preencher data-motion. */
+@media (prefers-reduced-motion: reduce) {
+  .site-root[data-template="mechanic-real"] {
+    --wr-duration: 0s;
+    --wr-lift: 0px;
+    --wr-tilt: 0deg;
+    --wr-sheen: 0;
+  }
+}
+
+/* Telas de toque: sem inclinação (só o efeito de pressionar). */
+@media (hover: none), (pointer: coarse) {
+  .site-root[data-template="mechanic-real"] {
+    --wr-tilt: 0deg;
+  }
+}

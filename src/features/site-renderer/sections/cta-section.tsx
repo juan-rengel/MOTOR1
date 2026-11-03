@@ -24,6 +24,7 @@ export function CtaSection({ section }: { section: SectionOf<"cta"> }) {
             onPrimary && "bg-site-primary text-site-on-primary",
             !onPrimary && "border border-site-border bg-site-surface",
           )}
+          data-slot="cta-panel"
         >
           {withImage && (
             <div className="absolute inset-0 -z-10" aria-hidden>
@@ -40,7 +41,7 @@ export function CtaSection({ section }: { section: SectionOf<"cta"> }) {
           )}
           <SplitText text={p.title} className={cn("site-heading mx-auto max-w-4xl text-[clamp(2.2rem,5.4vw,4.6rem)]", withImage && "text-white")} />
           {p.subtitle && (
-            <Reveal as="p" className={cn("mx-auto mt-6 max-w-2xl text-lg", onPrimary ? "opacity-80" : withImage ? "text-white/80" : "text-site-muted")}>
+            <Reveal as="p" className={cn("mx-auto mt-6 max-w-2xl text-lg", !onPrimary && (withImage ? "text-white/80" : "text-site-muted"))}>
               {p.subtitle}
             </Reveal>
           )}

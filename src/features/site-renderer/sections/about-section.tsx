@@ -12,7 +12,7 @@ export function AboutSection({ section }: { section: SectionOf<"about"> }) {
   const hasImage = Boolean(p.image.src);
   return (
     <section className="site-section">
-      <div className={hasImage ? "site-container grid items-center gap-12 md:grid-cols-2 md:gap-20" : "site-container max-w-4xl"}>
+      <div className={hasImage ? "site-container grid items-center gap-12 md:grid-cols-2 md:gap-20" : "site-container max-w-4xl"} data-slot="about-layout">
         <div>
           {p.eyebrow && (
             <Reveal as="p" variant="fade" className="site-eyebrow mb-5">
@@ -22,10 +22,10 @@ export function AboutSection({ section }: { section: SectionOf<"about"> }) {
           <SplitText text={p.title} className="site-heading text-[clamp(2rem,4.2vw,3.4rem)]" />
           <Reveal className="mt-6 space-y-4 leading-relaxed whitespace-pre-line text-site-muted md:text-lg">{p.text}</Reveal>
           {p.highlights.length > 0 && (
-            <Reveal as="ul" stagger className="mt-10 grid gap-3">
+            <Reveal as="ul" stagger className="mt-10 grid gap-3" data-slot="highlight-list">
               {p.highlights.map((h) => (
-                <li key={h.id} className="flex items-center gap-3 border-b border-site-border pb-3">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-site-primary text-site-on-primary">
+                <li key={h.id} className="flex items-center gap-3 border-b border-site-border pb-3" data-slot="highlight">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-site-primary text-site-on-primary" data-slot="highlight-icon">
                     <Check className="size-3.5" aria-hidden />
                   </span>
                   <span>{h.text}</span>

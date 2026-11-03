@@ -106,6 +106,7 @@ export function GallerySection({ section }: { section: SectionOf<"gallery"> }) {
               p.layout === "mosaic" && "grid auto-rows-[220px] gap-4 sm:grid-cols-2 md:auto-rows-[240px] md:grid-cols-6",
               p.layout === "strip" && "scrollbar-thin -mx-[clamp(1.25rem,4vw,2.5rem)] flex snap-x snap-mandatory gap-4 overflow-x-auto px-[clamp(1.25rem,4vw,2.5rem)] pb-4",
             )}
+            data-slot="gallery-grid"
           >
             {images.map((item, i) => (
               <li
@@ -116,6 +117,7 @@ export function GallerySection({ section }: { section: SectionOf<"gallery"> }) {
                   p.layout === "grid" && "aspect-[4/3]",
                   p.layout === "strip" && "aspect-[4/5]",
                 )}
+                data-slot="gallery-item"
               >
                 <button
                   type="button"
